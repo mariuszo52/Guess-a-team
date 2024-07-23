@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -65,7 +66,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
                 lineHeight = 70.sp,
                 textAlign = TextAlign.Center
             ),
-            text = "ODGADNIJ DRUŻYNĘ"
+            text = stringResource(id = R.string.odgadnij_druzyne)
         )
         Text(
             modifier = Modifier
@@ -74,7 +75,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
                 .background(color = colorResource(id = R.color.darkGreen))
                 .padding(30.dp),
             fontWeight = FontWeight.Bold,
-            text = "SEZON 2023/24"
+            text = stringResource(id = R.string.sezon)
         )
         Button(
 
@@ -134,7 +135,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
                     modifier = Modifier
                         .padding(top = 10.dp)
                         .align(alignment = Alignment.CenterHorizontally),
-                    text = "Ustawienia",
+                    text = stringResource(id = R.string.ustawienia),
                     textAlign = TextAlign.Center
                 )
             }
@@ -170,7 +171,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
                     modifier = Modifier
                         .padding(top = 10.dp)
                         .align(alignment = Alignment.CenterHorizontally),
-                    text = "Premium",
+                    text = stringResource(id = R.string.premium),
                     textAlign = TextAlign.Center
                 )
             }
