@@ -19,6 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 
@@ -26,7 +32,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             GuessTheTeamTheme {
                 LaunchedEffect(Unit) {
@@ -34,10 +39,28 @@ class MainActivity : ComponentActivity() {
                     controller.hide(WindowInsetsCompat.Type.navigationBars())
                     controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
-                    StartScreen {}
+                val navController = rememberNavController()
+                StartScreen({}, {navController.navigate("settings")})
+                Navigation(navController = navController)
 
                 }
             }
         }
+
+
     }
+
+@Composable
+fun Navigation(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "start"){
+        composable("start"){
+            StartScreen({}, {navController.navigate("settings")})
+
+            }
+        composable("settings"){
+            SettingsScreen {}
+        }
+    }
+
+}
 

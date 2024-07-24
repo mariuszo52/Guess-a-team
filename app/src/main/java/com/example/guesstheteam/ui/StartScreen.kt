@@ -39,7 +39,7 @@ import com.example.guesstheteam.R
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 
 @Composable
-fun StartScreen(onPlayClick: () -> Unit) {
+fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
     Image(
         modifier = Modifier
             .fillMaxSize()
@@ -121,7 +121,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
                         disabledContentColor = Color.Gray,
                         disabledContainerColor = Color.DarkGray
                     ),
-                    onClick = { onPlayClick() }
+                    onClick = { onSettingsClick() }
                 ) {
                     Image(
                         modifier = Modifier
@@ -185,7 +185,7 @@ fun StartScreen(onPlayClick: () -> Unit) {
 @Composable
 fun StartScreenPreview() {
     GuessTheTeamTheme {
-        StartScreen(onPlayClick = {})
+        StartScreen(onPlayClick = {}, onSettingsClick = {})
 
     }
 }

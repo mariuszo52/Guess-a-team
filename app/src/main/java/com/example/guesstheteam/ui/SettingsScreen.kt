@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,7 +71,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
             Text(
 
                 fontWeight = FontWeight.Bold,
-                text = "Ustawienia"
+                text = stringResource(id = R.string.ustawienia)
             )
         }
         HorizontalDivider(
@@ -125,7 +126,8 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     modifier = Modifier
                         .padding(start = 10.dp),
                     fontWeight = FontWeight.Bold,
-                    text = "Resetuj postęp"
+                    text = stringResource(id = R.string.reset)
+                    
                 )
             }
 
@@ -163,7 +165,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     modifier = Modifier
                         .padding(start = 10.dp),
                     fontWeight = FontWeight.Bold,
-                    text = "Warunki Korzystania"
+                    text = stringResource(id = R.string.terms)
                 )
             }
 
