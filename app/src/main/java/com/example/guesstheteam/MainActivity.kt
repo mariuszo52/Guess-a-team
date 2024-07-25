@@ -58,7 +58,7 @@ fun Navigation(navController: NavHostController) {
 
             }
         composable("settings"){
-            SettingsScreen {}
+            SettingsScreen{navController.navigate("start")}
         }
     }
 

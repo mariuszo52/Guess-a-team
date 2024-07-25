@@ -1,6 +1,7 @@
 package com.example.guesstheteam.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,9 @@ import com.example.guesstheteam.R
 fun SettingsScreen(onBackClick: () -> Unit) {
 
 
-    Column(
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     )
@@ -69,7 +72,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 )
             }
             Text(
-
+                color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 text = stringResource(id = R.string.ustawienia)
             )
@@ -123,6 +126,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     )
                 }
                 Text(
+                    color = Color.Black,
                     modifier = Modifier
                         .padding(start = 10.dp),
                     fontWeight = FontWeight.Bold,
@@ -162,6 +166,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     )
                 }
                 Text(
+                    color = Color.Black,
                     modifier = Modifier
                         .padding(start = 10.dp),
                     fontWeight = FontWeight.Bold,
