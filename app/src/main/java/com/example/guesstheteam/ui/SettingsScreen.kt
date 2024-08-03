@@ -36,11 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.guesstheteam.R
 
 
 @Composable
-fun SettingsScreen(onBackClick: () -> Unit) {
+fun SettingsScreen(navController: NavController) {
 
 
     Column(
@@ -71,7 +72,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     disabledContainerColor = Color.DarkGray
                 ),
 
-                onClick = onBackClick
+                onClick = { navController.popBackStack() }
             ) {
                 Image(
                     modifier = Modifier
@@ -116,7 +117,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                 MenuButton(
                     image = painterResource(id = R.drawable.baseline_delete_24),
                     text = stringResource(id = R.string.reset),
-                ) { onBackClick() }
+                ) { navController.popBackStack() }
             }
             Row(
                 modifier = Modifier
@@ -130,7 +131,7 @@ fun SettingsScreen(onBackClick: () -> Unit) {
                     image = painterResource(id = R.drawable.baseline_shield_24),
                     text = stringResource(id = R.string.terms)
                 )
-                { onBackClick() }
+                { navController.popBackStack() }
             }
 
         }
@@ -180,10 +181,4 @@ fun MenuButton(image: Painter, text: String, onClick: () -> Unit) {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun SettingsScreenPreview() {
-    SettingsScreen(onBackClick = {})
 }

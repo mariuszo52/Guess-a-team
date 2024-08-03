@@ -1,5 +1,6 @@
 package com.example.guesstheteam
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.guesstheteam.ui.LevelScreen
 import com.example.guesstheteam.ui.PlayScreen
 import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
@@ -28,10 +30,9 @@ class MainActivity : ComponentActivity() {
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 val navController = rememberNavController()
-                StartScreen({navController.navigate("play")}, { navController.navigate("settings") })
                 Navigation(navController = navController)
-
             }
+
         }
     }
 
@@ -42,14 +43,17 @@ class MainActivity : ComponentActivity() {
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "start") {
         composable("start") {
-            StartScreen({}, { navController.navigate("settings") })
+            StartScreen(navController)
+        }
 
-        }
         composable("settings") {
-            SettingsScreen { navController.navigate("start") }
+            SettingsScreen(navController)
         }
-        composable("play"){
-            PlayScreen { navController.navigate("start") }
+        composable("play") {
+            PlayScreen(navController)
+        }
+        composable("level"){
+            LevelScreen()
         }
     }
 

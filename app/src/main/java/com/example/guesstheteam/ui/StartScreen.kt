@@ -32,14 +32,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.guesstheteam.R
-import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 
 @Composable
-fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
+fun StartScreen(navController: NavController) {
     Image(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +88,7 @@ fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = { onPlayClick() }
+            onClick = {navController.navigate("play")}
         ) {
             Image(
                 modifier = Modifier
@@ -121,7 +120,7 @@ fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
                         disabledContentColor = Color.Gray,
                         disabledContainerColor = Color.DarkGray
                     ),
-                    onClick = { onSettingsClick() }
+                    onClick = { navController.navigate("settings") }
                 ) {
                     Image(
                         modifier = Modifier
@@ -156,7 +155,7 @@ fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
                         disabledContentColor = Color.Gray,
                         disabledContainerColor = Color.DarkGray
                     ),
-                    onClick = { onPlayClick() }
+                    onClick = { navController.navigate("level") }
                 ) {
                     Image(
                         colorFilter = ColorFilter.tint(colorResource(id = R.color.gold)),
@@ -180,12 +179,3 @@ fun StartScreen(onPlayClick: () -> Unit, onSettingsClick: () -> Unit) {
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun StartScreenPreview() {
-    GuessTheTeamTheme {
-        StartScreen(onPlayClick = {}, onSettingsClick = {})
-
-    }
-}

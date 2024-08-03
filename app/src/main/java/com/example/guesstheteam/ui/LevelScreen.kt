@@ -4,11 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,128 +15,91 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.guesstheteam.R
 
 @Composable
-fun PlayScreen(navController: NavController) {
+fun LevelScreen() {
     Column(
-        modifier = Modifier
-            .background(color = Color.White)
-            .fillMaxSize()
-    ) {
-        PlayScreenMenu(navController)
-        PlayScreenMain()
-    }
-}
-
-@Composable
-fun PlayScreenMain() {
-    Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(id = R.drawable.grass),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            alpha = 0.4f
-        )
-        LazyVerticalGrid(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .fillMaxSize(),
-            contentPadding = PaddingValues(15.dp),
-
-
-            ) {
-            items(100) {
-                LevelListElement()
-            }
-
-        }
-
+        LevelScreenMenu(150)
+        LevelScreenMain()
     }
+
+
 }
 
 @Composable
-fun LevelListElement() {
+fun LevelScreenMain() {
     Column(
         modifier = Modifier
-            .aspectRatio(2/3f)
-            .fillMaxWidth()
-            .graphicsLayer(alpha = 0.9f)
+            .background(color = Color.Red)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
 
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
+                .height(500.dp)
         ) {
-
+            var maxWidth = maxWidth
+            var maxHeight = maxHeight
             Image(
-                contentScale = ContentScale.FillBounds,
+                painter = painterResource(id = R.drawable.grass),
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize(),
-                painter = painterResource(id = R.drawable.listel),
-                contentDescription = null
+                contentScale = ContentScale.FillBounds,
             )
             Image(
+                painter = painterResource(id = R.drawable.testflag),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .rotate(10f),
-                colorFilter = ColorFilter.tint(Color.Green),
-                painter = painterResource(id = R.drawable.baseline_check_box_24),
-                contentDescription = null
+                    .offset(
+                        (maxWidth.value * 0.20).dp,
+                        (maxHeight.value * 0.20).dp)
+                    .clip(CircleShape)
+                    .size(50.dp)
+                    .background(color = Color.White)
+
             )
         }
+
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .background(color = Color.Gray)
         ) {
-            Text(
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.White),
-                color = colorResource(id = R.color.darkGreen),
-                text = "100"
-            )
+            Text(text = "lalalal")
         }
-
-
     }
-
 }
+
 @Composable
-fun PlayScreenMenu(navController: NavController) {
+fun LevelScreenMenu(levelId: Int) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -157,7 +119,7 @@ fun PlayScreenMenu(navController: NavController) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = {navController.popBackStack()}
+            onClick = {}
         ) {
             Image(
                 colorFilter = ColorFilter.tint(Color.White),
@@ -172,17 +134,8 @@ fun PlayScreenMenu(navController: NavController) {
             modifier = Modifier
                 .width(200.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_check_box_24),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(colorResource(R.color.darkGreen)),
-                modifier = Modifier
-                    .size(55.dp)
-                    .align(Alignment.TopStart)
-            )
-
             Text(
-                text = "116/120",
+                text = "Poziom $levelId",
                 textAlign = TextAlign.End,
                 color = colorResource(id = R.color.darkGreen),
                 fontWeight = FontWeight.Bold,
@@ -220,4 +173,10 @@ fun PlayScreenMenu(navController: NavController) {
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun LevelScreenPreview() {
+    LevelScreen()
 }
