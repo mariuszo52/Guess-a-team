@@ -1,5 +1,6 @@
 package com.example.guesstheteam.ui
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,14 +30,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.guesstheteam.MainActivity
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Position
 
@@ -52,6 +56,9 @@ fun LevelScreen() {
 
 
 }
+
+fun Int.dpToPx(context: Context): Float = (this * context.resources.displayMetrics.density)
+
 
 @Composable
 fun LevelScreenMain() {
@@ -77,6 +84,9 @@ fun LevelScreenMain() {
                 contentScale = ContentScale.FillBounds,
             )
             PositionImage(maxWidth, maxHeight, Position.SN)
+
+
+
         }
 
         Row(
@@ -113,18 +123,18 @@ fun LevelScreenMain() {
 }
 
 @Composable
-fun PositionImage (maxWidth: Dp, maxHeight: Dp, position: Position) {
+fun PositionImage(maxWidth: Dp, maxHeight: Dp, position: Position) {
     Image(
         painter = painterResource(id = R.drawable.testflag),
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .offset(
-                (maxWidth.value * position.widthPercent/100).dp,
-                (maxHeight.value * position.heightPercent/100).dp
+                ((maxWidth.value * position.widthPercent / 100 )- 30.dp.value).dp,
+                ((maxHeight.value * position.heightPercent / 100) - 30.dp.value).dp
             )
             .clip(CircleShape)
-            .size(50.dp)
+            .size(60.dp)
             .background(color = Color.White)
 
     )
@@ -215,7 +225,8 @@ fun LevelScreenHelpButton(imageId: Int, text: String, onClick: () -> Unit) {
             containerColor = colorResource(id = R.color.darkGreen),
             contentColor = Color.White,
             disabledContainerColor = Color.Gray,
-            disabledContentColor = Color.White),
+            disabledContentColor = Color.White
+        ),
         contentPadding = PaddingValues(0.dp),
         modifier = Modifier
             .padding(horizontal = 10.dp)
@@ -234,7 +245,8 @@ fun LevelScreenHelpButton(imageId: Int, text: String, onClick: () -> Unit) {
                     .padding(bottom = 2.dp)
                     .size(15.dp),
                 painter = painterResource(id = imageId),
-                contentDescription = null)
+                contentDescription = null
+            )
             Text(
                 lineHeight = 10.sp,
                 textAlign = TextAlign.Center,

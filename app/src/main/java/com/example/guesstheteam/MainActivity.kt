@@ -3,8 +3,10 @@ package com.example.guesstheteam
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.Px
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.unit.Dp
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 }
                 val navController = rememberNavController()
                 Navigation(navController = navController)
+
             }
 
         }
@@ -51,7 +54,7 @@ fun Navigation(navController: NavHostController) {
         composable("play") {
             PlayScreen(navController)
         }
-        composable("level"){
+        composable("level") {
             LevelScreen()
         }
     }
