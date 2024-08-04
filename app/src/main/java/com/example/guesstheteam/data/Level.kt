@@ -1,8 +1,11 @@
 package com.example.guesstheteam.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Level(
-    var id: Long,
-    var players: List<Player>,
+    @PrimaryKey var id: Long,
     var answer: String,
     var shortAnswer: String,
     var isCompleted: Boolean,
