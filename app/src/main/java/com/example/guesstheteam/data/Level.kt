@@ -1,10 +1,10 @@
 package com.example.guesstheteam.data
 
 data class Level(
-    private var id: Long,
-    private var players: List<Player>,
-    private var answer: String,
-    private var shortAnswer: String,
-    private var isCompleted: Boolean,
-    private var league: String
+    var id: Long,
+    var players: List<Player>,
+    var answer: String,
+    var shortAnswer: String,
+    var isCompleted: Boolean,
+    var league: String
 )

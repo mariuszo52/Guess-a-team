@@ -43,11 +43,11 @@
       </SelectionState>
       <SelectionState runConfigName="LevelScreenPreview">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-08-03T18:33:43.000607700Z">
+        <DropdownSelection timestamp="2024-08-04T07:56:46.188355800Z">
           <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=ug4h7hk77lizmbwk" />
-            </handle>
+            <template>
+              <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=a51/31" />
+            </template>
           </Target>
         </DropdownSelection>
         <DialogSelection />
