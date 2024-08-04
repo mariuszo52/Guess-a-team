@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -57,7 +58,6 @@ fun LevelScreen() {
 
 }
 
-fun Int.dpToPx(context: Context): Float = (this * context.resources.displayMetrics.density)
 
 
 @Composable
@@ -86,7 +86,6 @@ fun LevelScreenMain() {
             PositionImage(maxWidth, maxHeight, Position.SN)
 
 
-
         }
 
         Row(
@@ -100,14 +99,17 @@ fun LevelScreenMain() {
 
         ) {
             LevelScreenHelpButton(
-                imageId = R.drawable.cup, text = "NAZWA LIGI", onClick = { println("click LIGA") })
+                imageId = R.drawable.cup,
+                text = "NAZWA LIGI",
+                "20",
+                onClick = { println("click LIGA") })
             LevelScreenHelpButton(
                 imageId = R.drawable.shirt,
-                text = "POKAŻ GRACZA",
+                text = "POKAŻ GRACZA", "10",
                 onClick = { println("click LIGA") })
             LevelScreenHelpButton(
                 imageId = R.drawable.shield,
-                text = "NAZWA DRUŻYNY",
+                text = "NAZWA DRUŻYNY", "90",
                 onClick = { println("click LIGA") })
         }
         Row(
@@ -130,7 +132,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, position: Position) {
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .offset(
-                ((maxWidth.value * position.widthPercent / 100 )- 30.dp.value).dp,
+                ((maxWidth.value * position.widthPercent / 100) - 30.dp.value).dp,
                 ((maxHeight.value * position.heightPercent / 100) - 30.dp.value).dp
             )
             .clip(CircleShape)
@@ -219,7 +221,7 @@ fun LevelScreenMenu(levelId: Int) {
 }
 
 @Composable
-fun LevelScreenHelpButton(imageId: Int, text: String, onClick: () -> Unit) {
+fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick: () -> Unit) {
     Button(
         colors = ButtonColors(
             containerColor = colorResource(id = R.color.darkGreen),
@@ -234,25 +236,39 @@ fun LevelScreenHelpButton(imageId: Int, text: String, onClick: () -> Unit) {
         shape = RoundedCornerShape(15),
         onClick = onClick
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Image(
+
+            Box(
                 modifier = Modifier
-                    .padding(bottom = 2.dp)
-                    .size(15.dp),
-                painter = painterResource(id = imageId),
-                contentDescription = null
-            )
-            Text(
-                lineHeight = 10.sp,
-                textAlign = TextAlign.Center,
-                fontSize = 10.sp,
-                text = text
-            )
+                    .fillMaxSize()
+            ) {
+                Text(
+                    color = colorResource(id = R.color.darkGreen),
+                    modifier = Modifier
+                        .rotate(45f)
+                        .background(color = colorResource(id = R.color.gold))
+                        .align(Alignment.TopEnd),
+                    text = priceText
+                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                Image(
+                    modifier = Modifier
+                        .padding(bottom = 2.dp)
+                        .size(15.dp),
+                    painter = painterResource(id = imageId),
+                    contentDescription = null
+                )
+                Text(
+                    lineHeight = 10.sp,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    text = text
+                )
+            }
         }
 
     }
