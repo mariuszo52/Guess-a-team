@@ -1,12 +1,16 @@
 package com.example.guesstheteam.repository
 
+import android.content.Context
+import com.example.guesstheteam.data.GuessDatabase
 import com.example.guesstheteam.data.Level
-import com.example.guesstheteam.data.LevelDao
-import kotlinx.coroutines.flow.Flow
 
-class LevelRepository(private val levelDao: LevelDao){
+class LevelRepository(context: Context) {
+    private val levelDao = GuessDatabase.getDatabase(context).LevelDao()
 
-    fun getAllLevels(): Flow<List<Level>>{
-        return levelDao.getAllLevels()
+    fun getAllLevels() = levelDao.getAllLevels()
+
+    suspend fun addLevel(level: Level){
+        return levelDao.addLevel(level)
     }
+
 }

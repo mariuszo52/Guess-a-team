@@ -1,12 +1,18 @@
 package com.example.guesstheteam
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +22,8 @@ import com.example.guesstheteam.ui.PlayScreen
 import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
+import com.example.guesstheteam.viewModel.LevelViewModel
+import java.util.Collections
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +37,9 @@ class MainActivity : ComponentActivity() {
                     controller.systemBarsBehavior =
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
+                val vm = ViewModelProvider(this)[LevelViewModel::class.java]
                 val navController = rememberNavController()
-                Navigation(navController = navController)
+                Navigation(navController = navController, vm = vm)
 
             }
 
@@ -41,7 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(vm: LevelViewModel, navController: NavHostController) {
     NavHost(navController = navController, startDestination = "start") {
         composable("start") {
             StartScreen(navController)
@@ -51,7 +60,10 @@ fun Navigation(navController: NavHostController) {
             SettingsScreen(navController)
         }
         composable("play") {
-            PlayScreen(navController)
+            val levels by vm.levels.collectAsState(initial = Collections.emptyList())
+            PlayScreen(
+                levels = levels,
+                navController)
         }
         composable("level") {
             LevelScreen()

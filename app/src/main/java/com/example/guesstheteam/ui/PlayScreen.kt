@@ -1,5 +1,6 @@
 package com.example.guesstheteam.ui
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -37,21 +39,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.guesstheteam.R
+import com.example.guesstheteam.data.Level
+import com.example.guesstheteam.viewModel.LevelViewModel
+
 
 @Composable
-fun PlayScreen(navController: NavController) {
+fun PlayScreen(levels:List<Level>, navController: NavController) {
     Column(
         modifier = Modifier
             .background(color = Color.White)
             .fillMaxSize()
     ) {
         PlayScreenMenu(navController)
-        PlayScreenMain()
+        PlayScreenMain(levels)
     }
 }
 
 @Composable
-fun PlayScreenMain() {
+fun PlayScreenMain(levels: List<Level>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,8 +79,8 @@ fun PlayScreenMain() {
 
 
             ) {
-            items(100) {
-                LevelListElement()
+            items(levels) { level ->
+                LevelListElement(level)
             }
 
         }
@@ -84,10 +89,10 @@ fun PlayScreenMain() {
 }
 
 @Composable
-fun LevelListElement() {
+fun LevelListElement(level: Level) {
     Column(
         modifier = Modifier
-            .aspectRatio(2/3f)
+            .aspectRatio(2 / 3f)
             .fillMaxWidth()
             .graphicsLayer(alpha = 0.9f)
 

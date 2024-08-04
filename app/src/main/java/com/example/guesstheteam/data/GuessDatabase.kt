@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [Level::class, Player::class], version = 1, exportSchema = false)
 abstract class GuessDatabase: RoomDatabase() {
     abstract fun LevelDao(): LevelDao
+    abstract fun PlayerDao(): PlayerDao
 
     companion object {
         @Volatile
@@ -18,9 +19,8 @@ abstract class GuessDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GuessDatabase::class.java,
-                    "my_database"
-                ).createFromAsset("prepopulate.sql")  // Wskazanie pliku SQL
-                    .build()
+                    "guessDatabase"
+                ).build()
                 INSTANCE = instance
                 instance
             }
