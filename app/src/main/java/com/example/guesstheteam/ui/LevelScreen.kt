@@ -46,12 +46,12 @@ import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Position
 
 @Composable
-fun LevelScreen() {
+fun LevelScreen(testClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LevelScreenMenu(150)
+        LevelScreenMenu(150, testClick)
         LevelScreenMain()
     }
 
@@ -144,7 +144,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, position: Position) {
 }
 
 @Composable
-fun LevelScreenMenu(levelId: Int) {
+fun LevelScreenMenu(levelId: Int, testClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -164,7 +164,7 @@ fun LevelScreenMenu(levelId: Int) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = {}
+            onClick = testClick
         ) {
             Image(
                 colorFilter = ColorFilter.tint(Color.White),
@@ -278,5 +278,5 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
 @Preview
 @Composable
 private fun LevelScreenPreview() {
-    LevelScreen()
+    LevelScreen({})
 }

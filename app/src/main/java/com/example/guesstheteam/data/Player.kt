@@ -14,13 +14,12 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["levelId"])]
 )
 data class Player(
-    @PrimaryKey
-    var id: Long,
-    var name: String,
-    var countryUrl: String,
-    var isShowed: Boolean,
-    var position: Position,
-
-    var levelId: Long
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val name: String,
+    val countryUrl: String,
+    val isShowed: Boolean,
+    val position: Position,
+    val levelId: Long
 
 )

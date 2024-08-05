@@ -12,5 +12,5 @@ interface LevelDao {
     fun getAllLevels(): Flow<List<Level>>
 
     @Insert
-    suspend fun addLevel(level: Level)
+    suspend fun addLevel(level: Level):Long
 }

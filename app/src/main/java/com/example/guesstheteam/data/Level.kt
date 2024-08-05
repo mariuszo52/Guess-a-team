@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Level(
-    @PrimaryKey var id: Long,
-    var answer: String,
-    var shortAnswer: String,
-    var isCompleted: Boolean,
-    var league: String
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val answer: String,
+    val shortAnswer: String,
+    val isCompleted: Boolean,
+    val league: String
 )

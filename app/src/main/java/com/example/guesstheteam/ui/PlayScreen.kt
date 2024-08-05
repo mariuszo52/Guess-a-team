@@ -1,6 +1,5 @@
 package com.example.guesstheteam.ui
 
-import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,11 +39,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
-import com.example.guesstheteam.viewModel.LevelViewModel
 
 
 @Composable
-fun PlayScreen(levels:List<Level>, navController: NavController) {
+fun PlayScreen(levels: List<Level>, navController: NavController) {
     Column(
         modifier = Modifier
             .background(color = Color.White)
@@ -133,7 +131,7 @@ fun LevelListElement(level: Level) {
                     .fillMaxWidth()
                     .background(color = Color.White),
                 color = colorResource(id = R.color.darkGreen),
-                text = "100"
+                text = level.id.toString()
             )
         }
 
@@ -141,6 +139,7 @@ fun LevelListElement(level: Level) {
     }
 
 }
+
 @Composable
 fun PlayScreenMenu(navController: NavController) {
     Row(
@@ -162,7 +161,7 @@ fun PlayScreenMenu(navController: NavController) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = {navController.popBackStack()}
+            onClick = { navController.popBackStack() }
         ) {
             Image(
                 colorFilter = ColorFilter.tint(Color.White),
