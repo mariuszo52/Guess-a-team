@@ -19,5 +19,6 @@ enum class Position(val widthPercent: Int, val heightPercent: Int) {
     PSO(65,80),
     LO(20, 70),
     PO(80,70),
+    BR(50, 93)
 
 }

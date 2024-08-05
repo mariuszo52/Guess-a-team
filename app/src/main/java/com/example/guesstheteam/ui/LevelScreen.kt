@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -59,7 +60,6 @@ fun LevelScreen(testClick: () -> Unit) {
 }
 
 
-
 @Composable
 fun LevelScreenMain() {
     Column(
@@ -83,7 +83,8 @@ fun LevelScreenMain() {
                     .fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
             )
-            PositionImage(maxWidth, maxHeight, Position.SN)
+            PositionImage(maxWidth, maxHeight, Position.BR)
+            PositionImage(maxWidth, maxHeight, Position.SO)
 
 
         }
@@ -237,24 +238,25 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
         onClick = onClick
     ) {
 
-            Box(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+            Text(
+                textAlign = TextAlign.Center,
+                color = colorResource(id = R.color.darkGreen),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopEnd)
+                    .background(color = colorResource(id = R.color.gold)),
+                text = priceText
+            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Text(
-                    color = colorResource(id = R.color.darkGreen),
-                    modifier = Modifier
-                        .rotate(45f)
-                        .background(color = colorResource(id = R.color.gold))
-                        .align(Alignment.TopEnd),
-                    text = priceText
-                )
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
                 Image(
                     modifier = Modifier
                         .padding(bottom = 2.dp)
