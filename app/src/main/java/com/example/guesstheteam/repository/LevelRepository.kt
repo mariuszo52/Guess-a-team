@@ -9,8 +9,8 @@ class LevelRepository(context: Context) {
 
     fun getAllLevels() = levelDao.getAllLevels()
 
-    suspend fun addLevel(level: Level):Long{
-        return levelDao.addLevel(level)
-    }
+    fun getLevelPlayersById(levelId: Long) = levelDao.getLevelPlayersById(levelId)
+
+    fun getLevelById(id: Long) = levelDao.getLevelById(id)
 
 }

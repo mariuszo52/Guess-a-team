@@ -12,16 +12,8 @@ import kotlinx.coroutines.launch
 class LevelViewModel(app: Application) : AndroidViewModel(app) {
     private val levelRepository = LevelRepository(app)
     val levelsFlow = levelRepository.getAllLevels()
-    private val _levelId = MutableStateFlow<Long?>(null)
-    val levelId: StateFlow<Long?> get() = _levelId
-
-    fun addLevel(level: Level){
-        viewModelScope.launch {
-            val id = levelRepository.addLevel(level)
-            _levelId.value = id
-        }
-    }
-
+    fun getLevelById(id: Long) = levelRepository.getLevelById(id)
+    fun getLevelPlayers(levelId: Long) = levelRepository.getLevelPlayersById(levelId)
 
 
 }

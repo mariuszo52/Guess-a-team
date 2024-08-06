@@ -11,6 +11,9 @@ interface LevelDao {
     @Query("SELECT * from Level")
     fun getAllLevels(): Flow<List<Level>>
 
-    @Insert
-    suspend fun addLevel(level: Level):Long
+    @Query("SELECT * from Player where levelId = :levelId")
+    fun getLevelPlayersById(levelId: Long): Flow<List<Player>>
+
+    @Query("SELECT * from Level WHERE id=:id")
+    fun getLevelById(id: Long): Flow<Level>
 }

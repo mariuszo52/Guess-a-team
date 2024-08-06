@@ -11,9 +11,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.guesstheteam.ui.LevelScreen
 import com.example.guesstheteam.ui.PlayScreen
 import com.example.guesstheteam.ui.SettingsScreen
@@ -36,10 +38,8 @@ class MainActivity : ComponentActivity() {
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 val levelViewModel = ViewModelProvider(this)[LevelViewModel::class.java]
-                val playerViewModel = ViewModelProvider(this)[PlayerViewModel::class.java]
                 val navController = rememberNavController()
                 Navigation(
-                    playerViewModel = playerViewModel,
                     navController = navController,
                     levelViewModel = levelViewModel
                 )
@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(
-    playerViewModel: PlayerViewModel,
     levelViewModel: LevelViewModel,
     navController: NavHostController
 ) {
@@ -69,13 +68,25 @@ fun Navigation(
             val levels by levelViewModel.levelsFlow.collectAsState(initial = Collections.emptyList())
             PlayScreen(
                 levels = levels,
-                navController
-            )
+                onBackClick = { navController.popBackStack() },
+                onLevelClick = { level ->
+                    run {
+                        val id = level.id
+                        navController.navigate("level/$id")
+                    }
+                })
         }
-        composable("level") {
-            LevelScreen { }
+        composable(
+            "level/{levelId}",
+            arguments = listOf(navArgument("levelId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val levelId = backStackEntry.arguments?.getLong("levelId") ?: 0
+            val level by levelViewModel.getLevelById(levelId).collectAsState(initial = null)
+            val players by levelViewModel.getLevelPlayers(levelId)
+                .collectAsState(initial = Collections.emptyList())
+            level?.let { LevelScreen(it, players, onBackClick = { navController.popBackStack() }) }
         }
     }
-
 }
+
 

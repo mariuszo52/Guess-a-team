@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -42,19 +43,19 @@ import com.example.guesstheteam.data.Level
 
 
 @Composable
-fun PlayScreen(levels: List<Level>, navController: NavController) {
+fun PlayScreen(levels: List<Level>, onBackClick: () -> Unit, onLevelClick: (level:Level) -> Unit) {
     Column(
         modifier = Modifier
             .background(color = Color.White)
             .fillMaxSize()
     ) {
-        PlayScreenMenu(navController)
-        PlayScreenMain(levels)
+        PlayScreenMenu(onBackClick)
+        PlayScreenMain(levels, onLevelClick)
     }
 }
 
 @Composable
-fun PlayScreenMain(levels: List<Level>) {
+fun PlayScreenMain(levels: List<Level>, onLevelClick: (level:Level) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +79,23 @@ fun PlayScreenMain(levels: List<Level>) {
 
             ) {
             items(levels) { level ->
-                LevelListElement(level)
+                Button(
+                    colors = ButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = colorResource(id = R.color.darkGreen),
+                        disabledContentColor = Color.Transparent,
+                        disabledContainerColor = colorResource(R.color.darkGreen)
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .aspectRatio(2 / 3f)
+                        .fillMaxWidth()
+                        .graphicsLayer(alpha = 0.9f),
+                    onClick = { onLevelClick(level)}) {
+                    LevelListElement(level)
+
+                }
             }
 
         }
@@ -90,10 +107,7 @@ fun PlayScreenMain(levels: List<Level>) {
 fun LevelListElement(level: Level) {
     Column(
         modifier = Modifier
-            .aspectRatio(2 / 3f)
-            .fillMaxWidth()
-            .graphicsLayer(alpha = 0.9f)
-
+            .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
@@ -141,7 +155,7 @@ fun LevelListElement(level: Level) {
 }
 
 @Composable
-fun PlayScreenMenu(navController: NavController) {
+fun PlayScreenMenu(onBackClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -161,7 +175,7 @@ fun PlayScreenMenu(navController: NavController) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = { navController.popBackStack() }
+            onClick = { onBackClick() }
         ) {
             Image(
                 colorFilter = ColorFilter.tint(Color.White),

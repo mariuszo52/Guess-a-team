@@ -1,6 +1,5 @@
 package com.example.guesstheteam.ui
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,33 +26,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.guesstheteam.MainActivity
 import com.example.guesstheteam.R
+import com.example.guesstheteam.data.Level
+import com.example.guesstheteam.data.Player
 import com.example.guesstheteam.data.Position
 
 @Composable
-fun LevelScreen(testClick: () -> Unit) {
+fun LevelScreen(level: Level, players: List<Player>, onBackClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LevelScreenMenu(150, testClick)
-        LevelScreenMain()
+        LevelScreenMenu(levelId = level.id, onBackClick)
+        LevelScreenMain(level, players)
     }
 
 
@@ -61,7 +57,7 @@ fun LevelScreen(testClick: () -> Unit) {
 
 
 @Composable
-fun LevelScreenMain() {
+fun LevelScreenMain(level: Level, players: List<Player>) {
     Column(
         modifier = Modifier
             .background(color = Color.Red)
@@ -83,8 +79,9 @@ fun LevelScreenMain() {
                     .fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
             )
-            PositionImage(maxWidth, maxHeight, Position.BR)
-            PositionImage(maxWidth, maxHeight, Position.SO)
+            players.forEach { player ->
+                PositionImage(maxWidth, maxHeight, player.position)
+            }
 
 
         }
@@ -145,7 +142,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, position: Position) {
 }
 
 @Composable
-fun LevelScreenMenu(levelId: Int, testClick: () -> Unit) {
+fun LevelScreenMenu(levelId: Long, testClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -244,7 +241,6 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
         ) {
 
             Text(
-                textAlign = TextAlign.Center,
                 color = colorResource(id = R.color.darkGreen),
                 modifier = Modifier
                     .align(alignment = Alignment.TopEnd)
@@ -275,10 +271,4 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
 
     }
 
-}
-
-@Preview
-@Composable
-private fun LevelScreenPreview() {
-    LevelScreen({})
 }
