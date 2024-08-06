@@ -23,12 +23,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,7 +82,7 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 contentScale = ContentScale.FillBounds,
             )
             players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player.position)
+                PositionImage(maxWidth, maxHeight, player)
             }
 
 
@@ -123,15 +125,25 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
 }
 
 @Composable
-fun PositionImage(maxWidth: Dp, maxHeight: Dp, position: Position) {
+fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player) {
+    val context = LocalContext.current
+    val imageId = remember(player.countryUrl) {
+
+        context.resources.getIdentifier(
+            player.countryUrl.lowercase(),
+            "drawable",
+            context.packageName
+        )
+    }
+    println(player.countryUrl.lowercase())
     Image(
-        painter = painterResource(id = R.drawable.testflag),
+        painter = painterResource(id = imageId),
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .offset(
-                ((maxWidth.value * position.widthPercent / 100) - 30.dp.value).dp,
-                ((maxHeight.value * position.heightPercent / 100) - 30.dp.value).dp
+                ((maxWidth.value * player.position.widthPercent / 100) - 30.dp.value).dp,
+                ((maxHeight.value * player.position.heightPercent / 100) - 30.dp.value).dp
             )
             .clip(CircleShape)
             .size(60.dp)
