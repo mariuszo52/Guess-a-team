@@ -22,7 +22,6 @@ import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
-import com.example.guesstheteam.viewModel.PlayerViewModel
 import java.util.Collections
 
 class MainActivity : ComponentActivity() {
@@ -68,6 +67,7 @@ fun Navigation(
             val levels by levelViewModel.levelsFlow.collectAsState(initial = Collections.emptyList())
             PlayScreen(
                 levels = levels,
+                levelViewModel,
                 onBackClick = { navController.popBackStack() },
                 onLevelClick = { level ->
                     run {

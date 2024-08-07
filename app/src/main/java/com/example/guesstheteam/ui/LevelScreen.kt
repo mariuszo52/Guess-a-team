@@ -82,7 +82,7 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 contentScale = ContentScale.FillBounds,
             )
             players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player)
+                PositionImage(maxWidth, maxHeight, player, 60)
             }
 
 
@@ -125,7 +125,7 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
 }
 
 @Composable
-fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player) {
+fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, flagSize: Int) {
     val context = LocalContext.current
     val imageId = remember(player.countryUrl) {
 
@@ -142,11 +142,11 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player) {
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .offset(
-                ((maxWidth.value * player.position.widthPercent / 100) - 30.dp.value).dp,
-                ((maxHeight.value * player.position.heightPercent / 100) - 30.dp.value).dp
+                ((maxWidth.value * player.position.widthPercent / 100) - flagSize/2.dp.value).dp,
+                ((maxHeight.value * player.position.heightPercent / 100) - flagSize/2.dp.value).dp
             )
             .clip(CircleShape)
-            .size(60.dp)
+            .size(flagSize.dp)
             .background(color = Color.White)
 
     )

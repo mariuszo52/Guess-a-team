@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -40,22 +43,34 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
+import com.example.guesstheteam.data.Player
+import com.example.guesstheteam.viewModel.LevelViewModel
+import java.util.Collections
 
 
 @Composable
-fun PlayScreen(levels: List<Level>, onBackClick: () -> Unit, onLevelClick: (level:Level) -> Unit) {
+fun PlayScreen(
+    levels: List<Level>,
+    levelViewModel: LevelViewModel,
+    onBackClick: () -> Unit,
+    onLevelClick: (level: Level) -> Unit
+) {
     Column(
         modifier = Modifier
             .background(color = Color.White)
             .fillMaxSize()
     ) {
         PlayScreenMenu(onBackClick)
-        PlayScreenMain(levels, onLevelClick)
+        PlayScreenMain(levels, levelViewModel, onLevelClick)
     }
 }
 
 @Composable
-fun PlayScreenMain(levels: List<Level>, onLevelClick: (level:Level) -> Unit) {
+fun PlayScreenMain(
+    levels: List<Level>,
+    levelViewModel: LevelViewModel,
+    onLevelClick: (level: Level) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -79,6 +94,8 @@ fun PlayScreenMain(levels: List<Level>, onLevelClick: (level:Level) -> Unit) {
 
             ) {
             items(levels) { level ->
+                val players by levelViewModel.getLevelPlayers(level.id)
+                    .collectAsState(initial = Collections.emptyList())
                 Button(
                     colors = ButtonColors(
                         containerColor = Color.Transparent,
@@ -92,8 +109,8 @@ fun PlayScreenMain(levels: List<Level>, onLevelClick: (level:Level) -> Unit) {
                         .aspectRatio(2 / 3f)
                         .fillMaxWidth()
                         .graphicsLayer(alpha = 0.9f),
-                    onClick = { onLevelClick(level)}) {
-                    LevelListElement(level)
+                    onClick = { onLevelClick(level) }) {
+                    LevelListElement(level, players, 14 )
 
                 }
             }
@@ -104,24 +121,28 @@ fun PlayScreenMain(levels: List<Level>, onLevelClick: (level:Level) -> Unit) {
 }
 
 @Composable
-fun LevelListElement(level: Level) {
+fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
+                .fillMaxHeight(0.9f)
         ) {
-
+            val maxWidth = maxWidth
+            val maxHeight = maxHeight
             Image(
-                contentScale = ContentScale.FillBounds,
+                painter = painterResource(id = R.drawable.grass),
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize(),
-                painter = painterResource(id = R.drawable.listel),
-                contentDescription = null
+                contentScale = ContentScale.FillBounds,
             )
+            players.forEach { player ->
+                PositionImage(maxWidth, maxHeight, player, flagSize)
+            }
             Image(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
