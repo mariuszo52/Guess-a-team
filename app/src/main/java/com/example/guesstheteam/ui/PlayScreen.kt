@@ -110,7 +110,7 @@ fun PlayScreenMain(
                         .fillMaxWidth()
                         .graphicsLayer(alpha = 0.9f),
                     onClick = { onLevelClick(level) }) {
-                    LevelListElement(level, players, 14 )
+                    LevelListElement(level, players, 14)
 
                 }
             }
@@ -141,7 +141,7 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
                 contentScale = ContentScale.FillBounds,
             )
             players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player, flagSize)
+                PositionImage(maxWidth, maxHeight, player, false, flagSize)
             }
             Image(
                 modifier = Modifier

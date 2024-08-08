@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,7 +83,7 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 contentScale = ContentScale.FillBounds,
             )
             players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player, 60)
+                PositionImage(maxWidth, maxHeight, player, true,55)
             }
 
 
@@ -119,13 +120,19 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 .background(color = Color.Blue)
 
         ) {
-            Text(text = "TODO / INSERT RESPONSE FIELD")
+            Text(
+                fontSize = 3.sp,
+                color = colorResource(id = R.color.darkGreen),
+                modifier = Modifier
+                    .padding(2.dp, 1.dp)
+                    .background(color = Color.White),
+                text = "TODO / INSERT RESPONSE FIELD")
         }
     }
 }
 
 @Composable
-fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, flagSize: Int) {
+fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolean, flagSize: Int) {
     val context = LocalContext.current
     val imageId = remember(player.countryUrl) {
 
@@ -136,20 +143,38 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, flagSize: Int) {
         )
     }
     println(player.countryUrl.lowercase())
-    Image(
-        painter = painterResource(id = imageId),
-        contentDescription = null,
-        contentScale = ContentScale.FillBounds,
+    Box(
         modifier = Modifier
             .offset(
-                ((maxWidth.value * player.position.widthPercent / 100) - flagSize/2.dp.value).dp,
-                ((maxHeight.value * player.position.heightPercent / 100) - flagSize/2.dp.value).dp
+                ((maxWidth.value * player.position.widthPercent / 100) - flagSize / 2.dp.value).dp,
+                ((maxHeight.value * player.position.heightPercent / 100) - flagSize / 2.dp.value).dp
             )
-            .clip(CircleShape)
-            .size(flagSize.dp)
-            .background(color = Color.White)
+    ) {
+        Image(
+            painter = painterResource(id = imageId),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(flagSize.dp)
+                .background(color = Color.White)
 
-    )
+        )
+        if(showNames && player.isShowed){
+            Text(
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 8.sp,
+                color = colorResource(id = R.color.darkGreen),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .offset(y = 10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .width(flagSize.dp)
+                    .background(color = Color.White),
+                text = player.name)
+        }
+    }
 
 }
 
