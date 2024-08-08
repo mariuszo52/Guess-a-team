@@ -143,14 +143,16 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
             players.forEach { player ->
                 PositionImage(maxWidth, maxHeight, player, false, flagSize)
             }
-            Image(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .rotate(10f),
-                colorFilter = ColorFilter.tint(Color.Green),
-                painter = painterResource(id = R.drawable.baseline_check_box_24),
-                contentDescription = null
-            )
+            if (level.isCompleted) {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .rotate(10f),
+                    colorFilter = ColorFilter.tint(Color.Green),
+                    painter = painterResource(id = R.drawable.baseline_check_box_24),
+                    contentDescription = null
+                )
+            }
         }
         Column(
             modifier = Modifier
