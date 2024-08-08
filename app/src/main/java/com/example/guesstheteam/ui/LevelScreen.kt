@@ -44,15 +44,21 @@ import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
 import com.example.guesstheteam.data.Position
+import java.time.temporal.TemporalAmount
 
 @Composable
-fun LevelScreen(level: Level, players: List<Player>, onBackClick: () -> Unit) {
+fun LevelScreen(
+    level: Level,
+    players: List<Player>,
+    onBackClick: () -> Unit,
+    onLeagueNameClick: (level: Level) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         LevelScreenMenu(levelId = level.id, onBackClick)
-        LevelScreenMain(level, players)
+        LevelScreenMain(level, players, onLeagueNameClick)
     }
 
 
@@ -60,7 +66,11 @@ fun LevelScreen(level: Level, players: List<Player>, onBackClick: () -> Unit) {
 
 
 @Composable
-fun LevelScreenMain(level: Level, players: List<Player>) {
+fun LevelScreenMain(
+    level: Level,
+    players: List<Player>,
+    onLeagueNameClick: (level: Level) -> Unit
+) {
     Column(
         modifier = Modifier
             .background(color = Color.Red)
@@ -83,7 +93,7 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 contentScale = ContentScale.FillBounds,
             )
             players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player, true,55)
+                PositionImage(maxWidth, maxHeight, player, true, 55)
             }
 
 
@@ -99,11 +109,15 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
 
 
         ) {
-            LevelScreenHelpButton(
-                imageId = R.drawable.cup,
-                text = "NAZWA LIGI",
-                "20",
-                onClick = { println("click LIGA") })
+            if(!level.isLeagueShowed) {
+                LevelScreenHelpButton(
+                    imageId = R.drawable.cup,
+                    text = "NAZWA LIGI",
+                    "20",
+                    onClick = { onLeagueNameClick(level) })
+            }else {
+                TeamNameShowedButton(level = level)
+            }
             LevelScreenHelpButton(
                 imageId = R.drawable.shirt,
                 text = "POKAŻ GRACZA", "10",
@@ -126,7 +140,8 @@ fun LevelScreenMain(level: Level, players: List<Player>) {
                 modifier = Modifier
                     .padding(2.dp, 1.dp)
                     .background(color = Color.White),
-                text = "TODO / INSERT RESPONSE FIELD")
+                text = "TODO / INSERT RESPONSE FIELD"
+            )
         }
     }
 }
@@ -160,7 +175,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolea
                 .background(color = Color.White)
 
         )
-        if(showNames && player.isShowed){
+        if (showNames && player.isShowed) {
             Text(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -172,7 +187,8 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolea
                     .clip(RoundedCornerShape(10.dp))
                     .width(flagSize.dp)
                     .background(color = Color.White),
-                text = player.name)
+                text = player.name
+            )
         }
     }
 
@@ -253,6 +269,37 @@ fun LevelScreenMenu(levelId: Long, testClick: () -> Unit) {
             )
         }
     }
+}
+
+@Composable
+fun TeamNameShowedButton(level: Level) {
+    val context = LocalContext.current
+    val imageId = context.resources.getIdentifier(
+        level.league.lowercase(),
+        "drawable",
+        context.packageName
+    )
+    Button(
+        colors = ButtonColors(
+            containerColor = colorResource(id = R.color.darkGreen),
+            contentColor = Color.White,
+            disabledContainerColor = Color.Gray,
+            disabledContentColor = Color.White
+        ),
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .size(60.dp),
+        shape = RoundedCornerShape(15),
+        onClick = {}
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(id = imageId),
+            contentDescription = null )
+    }
+
 }
 
 @Composable

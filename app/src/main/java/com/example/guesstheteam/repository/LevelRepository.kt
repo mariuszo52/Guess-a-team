@@ -13,4 +13,9 @@ class LevelRepository(context: Context) {
 
     fun getLevelById(id: Long) = levelDao.getLevelById(id)
 
+    suspend fun showLeagueName(level: Level){
+        if(!level.isTeamNameShowed)
+        return levelDao.updateLeagueVisibility(level.id)
+    }
+
 }

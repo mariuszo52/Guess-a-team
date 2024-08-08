@@ -1,5 +1,6 @@
 package com.example.guesstheteam
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +24,12 @@ import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.util.Collections
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +91,19 @@ fun Navigation(
             val level by levelViewModel.getLevelById(levelId).collectAsState(initial = null)
             val players by levelViewModel.getLevelPlayers(levelId)
                 .collectAsState(initial = Collections.emptyList())
-            level?.let { LevelScreen(it, players, onBackClick = { navController.popBackStack() }) }
+            val coroutineScope = rememberCoroutineScope()
+            level?.let {
+                LevelScreen(
+                    it,
+                    players,
+                    onBackClick = { navController.popBackStack() },
+                    onLeagueNameClick = {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            levelViewModel.showLeagueName(level!!)
+                        }
+                    }
+                )
+            }
         }
     }
 }

@@ -16,4 +16,7 @@ interface LevelDao {
 
     @Query("SELECT * from Level WHERE id=:id")
     fun getLevelById(id: Long): Flow<Level>
+
+    @Query("UPDATE Level SET isLeagueShowed = 1 WHERE id = :levelId")
+    suspend fun updateLeagueVisibility(levelId: Long)
 }

@@ -9,5 +9,7 @@ data class Level(
     val answer: String,
     val shortAnswer: String,
     val isCompleted: Boolean,
-    val league: String
+    val league: String,
+    val isLeagueShowed: Boolean,
+    val isTeamNameShowed: Boolean
 )
