@@ -19,4 +19,7 @@ interface LevelDao {
 
     @Query("UPDATE Level SET isLeagueShowed = 1 WHERE id = :levelId")
     suspend fun updateLeagueVisibility(levelId: Long)
+
+    @Query("UPDATE Level SET isCompleted = 1 WHERE id = :levelId")
+    suspend fun updateIsLevelCompleted(levelId: Long)
 }

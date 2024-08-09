@@ -2,6 +2,7 @@ package com.example.guesstheteam.repository
 
 import android.content.Context
 import com.example.guesstheteam.data.GuessDatabase
+import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
 
 class PlayerRepository(context: Context) {
@@ -11,5 +12,7 @@ class PlayerRepository(context: Context) {
         return playerDao.addPlayer(player)
     }
 
-
+    suspend fun setLevelPlayersNamesVisible(level: Level){
+        playerDao.updateLevelPlayersAreShowed(level.id)
+    }
 }

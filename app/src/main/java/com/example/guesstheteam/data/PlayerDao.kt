@@ -11,5 +11,6 @@ interface PlayerDao {
     @Insert
     suspend fun addPlayer(player: Player)
 
-
+    @Query("UPDATE Player SET isShowed = 1 where levelId = :levelId")
+    suspend fun updateLevelPlayersAreShowed(levelId: Long)
 }

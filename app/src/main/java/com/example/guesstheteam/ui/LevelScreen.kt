@@ -27,7 +27,10 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -55,8 +59,8 @@ import java.time.temporal.TemporalAmount
 fun LevelScreen(
     level: Level,
     players: List<Player>,
+    onCheckClick: (String, Level) -> Unit,
     onBackClick: () -> Unit,
-    onAnswerChange: (String) -> String,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
     Column(
@@ -64,7 +68,7 @@ fun LevelScreen(
             .fillMaxSize()
     ) {
         LevelScreenMenu(levelId = level.id, onBackClick)
-        LevelScreenMain(level, players,onAnswerChange, onLeagueNameClick)
+        LevelScreenMain(level, players, onCheckClick, onLeagueNameClick)
     }
 
 
@@ -75,7 +79,7 @@ fun LevelScreen(
 fun LevelScreenMain(
     level: Level,
     players: List<Player>,
-    onAnswerChange: (String) -> String,
+    onCheckClick: (String, Level) -> Unit,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
     Column(
@@ -141,7 +145,7 @@ fun LevelScreenMain(
                 .background(color = Color.Blue)
 
         ) {
-            LevelScreenAnswerBox (onAnswerChange)
+            LevelScreenAnswerBox(level, onCheckClick)
         }
     }
 }
@@ -358,7 +362,7 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
 }
 
 @Composable
-fun LevelScreenAnswerBox(onAnswerChange: (String) -> String) {
+fun LevelScreenAnswerBox(level: Level, onCheckClick: (String, Level) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -366,56 +370,7 @@ fun LevelScreenAnswerBox(onAnswerChange: (String) -> String) {
             .fillMaxSize()
             .background(color = colorResource(id = R.color.darkGreen))
     ) {
-       Button(
-           colors = ButtonColors(
-               contentColor = Color.Transparent,
-               containerColor = Color.Transparent,
-               disabledContentColor = Color.Transparent,
-               disabledContainerColor = Color.Transparent
-           ),
-           contentPadding = PaddingValues(0.dp),
-           modifier = Modifier
-               .size(50.dp),
-           onClick = { /*TODO*/ }) {
-           Image(
-               modifier = Modifier
-                   .fillMaxSize(),
-               colorFilter = ColorFilter.tint(Color.White),
-               painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-               contentDescription = null
-           )
-       }
-
-        TextField(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .clip(RoundedCornerShape(20))
-                .background(color = Color.White)
-                .width(200.dp)
-                .height(50.dp),
-            value = TextFieldValue(""),
-            onValueChange = { text -> onAnswerChange(text.text) },
-            colors = TextFieldDefaults.colors(
-                errorContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedPlaceholderColor = Color.Gray,
-                disabledPlaceholderColor = Color.Gray,
-                errorPlaceholderColor = Color.Gray,
-                unfocusedPlaceholderColor = Color.Gray),
-            placeholder = {
-
-                    Text(
-
-                        color = Color.Gray,
-                        text = "Wpisz nazwę drużyny"
-                    )
-
-            }
-        )
         Button(
-            shape = RoundedCornerShape(20),
             colors = ButtonColors(
                 contentColor = Color.Transparent,
                 containerColor = Color.Transparent,
@@ -430,6 +385,65 @@ fun LevelScreenAnswerBox(onAnswerChange: (String) -> String) {
                 modifier = Modifier
                     .fillMaxSize(),
                 colorFilter = ColorFilter.tint(Color.White),
+                painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                contentDescription = null
+            )
+        }
+
+        var answer by remember { mutableStateOf(TextFieldValue("")) }
+
+        TextField(
+            enabled = !level.isCompleted,
+            maxLines = 1,
+            textStyle = TextStyle(
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.darkGreen)
+            ),
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clip(RoundedCornerShape(20))
+                .background(color = Color.White)
+                .width(200.dp)
+                .height(50.dp),
+            value = if (level.isCompleted) TextFieldValue(level.answer) else answer,
+            onValueChange = { textFieldValue -> answer = textFieldValue },
+            colors =
+            TextFieldDefaults.colors(
+                errorContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                disabledContainerColor = colorResource(id = R.color.lightGreen),
+                unfocusedContainerColor = Color.White,
+                focusedPlaceholderColor = Color.Gray,
+                disabledPlaceholderColor = Color.Gray,
+                errorPlaceholderColor = Color.Gray,
+                unfocusedPlaceholderColor = Color.Gray
+            ),
+            placeholder = {
+                Text(
+                    color = Color.Gray,
+                    text = "Wpisz nazwę drużyny"
+                )
+
+            }
+        )
+        Button(
+            enabled = !level.isCompleted,
+            shape = RoundedCornerShape(20),
+            colors = ButtonColors(
+                contentColor = Color.Transparent,
+                containerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
+            ),
+            contentPadding = PaddingValues(0.dp),
+            modifier = Modifier
+                .size(50.dp),
+            onClick = { onCheckClick(answer.text, level) }) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                colorFilter = if (level.isCompleted) ColorFilter.tint(colorResource(id = R.color.lightGreen))
+                else ColorFilter.tint(Color.White),
                 painter = painterResource(id = R.drawable.baseline_check_box_24),
                 contentDescription = null
             )
@@ -453,7 +467,6 @@ fun LevelScreenAnswerBox(onAnswerChange: (String) -> String) {
                 contentDescription = null
             )
         }
-
 
 
     }

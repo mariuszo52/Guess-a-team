@@ -96,7 +96,14 @@ fun Navigation(
                 LevelScreen(
                     it,
                     players,
-                    onAnswerChange = {"lalal".uppercase()},
+                    onCheckClick = { answer, level ->
+                        coroutineScope.launch(Dispatchers.IO) {
+                            levelViewModel.onCheckClick(
+                                level,
+                                answer
+                            )
+                        }
+                    },
                     onBackClick = { navController.popBackStack() },
                     onLeagueNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {

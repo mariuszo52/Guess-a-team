@@ -18,4 +18,8 @@ class LevelRepository(context: Context) {
         return levelDao.updateLeagueVisibility(level.id)
     }
 
+    suspend fun setLevelCompleted(level: Level){
+        levelDao.updateIsLevelCompleted(level.id)
+    }
+
 }
