@@ -22,6 +22,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +39,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -51,6 +56,7 @@ fun LevelScreen(
     level: Level,
     players: List<Player>,
     onBackClick: () -> Unit,
+    onAnswerChange: (String) -> String,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
     Column(
@@ -58,7 +64,7 @@ fun LevelScreen(
             .fillMaxSize()
     ) {
         LevelScreenMenu(levelId = level.id, onBackClick)
-        LevelScreenMain(level, players, onLeagueNameClick)
+        LevelScreenMain(level, players,onAnswerChange, onLeagueNameClick)
     }
 
 
@@ -69,6 +75,7 @@ fun LevelScreen(
 fun LevelScreenMain(
     level: Level,
     players: List<Player>,
+    onAnswerChange: (String) -> String,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
     Column(
@@ -109,13 +116,13 @@ fun LevelScreenMain(
 
 
         ) {
-            if(!level.isLeagueShowed) {
+            if (!level.isLeagueShowed) {
                 LevelScreenHelpButton(
                     imageId = R.drawable.cup,
                     text = "NAZWA LIGI",
                     "20",
                     onClick = { onLeagueNameClick(level) })
-            }else {
+            } else {
                 TeamNameShowedButton(level = level)
             }
             LevelScreenHelpButton(
@@ -134,14 +141,7 @@ fun LevelScreenMain(
                 .background(color = Color.Blue)
 
         ) {
-            Text(
-                fontSize = 3.sp,
-                color = colorResource(id = R.color.darkGreen),
-                modifier = Modifier
-                    .padding(2.dp, 1.dp)
-                    .background(color = Color.White),
-                text = "TODO / INSERT RESPONSE FIELD"
-            )
+            LevelScreenAnswerBox (onAnswerChange)
         }
     }
 }
@@ -297,7 +297,8 @@ fun TeamNameShowedButton(level: Level) {
             modifier = Modifier
                 .fillMaxSize(),
             painter = painterResource(id = imageId),
-            contentDescription = null )
+            contentDescription = null
+        )
     }
 
 }
@@ -354,5 +355,108 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
         }
 
     }
+}
+
+@Composable
+fun LevelScreenAnswerBox(onAnswerChange: (String) -> String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = colorResource(id = R.color.darkGreen))
+    ) {
+       Button(
+           colors = ButtonColors(
+               contentColor = Color.Transparent,
+               containerColor = Color.Transparent,
+               disabledContentColor = Color.Transparent,
+               disabledContainerColor = Color.Transparent
+           ),
+           contentPadding = PaddingValues(0.dp),
+           modifier = Modifier
+               .size(50.dp),
+           onClick = { /*TODO*/ }) {
+           Image(
+               modifier = Modifier
+                   .fillMaxSize(),
+               colorFilter = ColorFilter.tint(Color.White),
+               painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+               contentDescription = null
+           )
+       }
+
+        TextField(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clip(RoundedCornerShape(20))
+                .background(color = Color.White)
+                .width(200.dp)
+                .height(50.dp),
+            value = TextFieldValue(""),
+            onValueChange = { text -> onAnswerChange(text.text) },
+            colors = TextFieldDefaults.colors(
+                errorContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedPlaceholderColor = Color.Gray,
+                disabledPlaceholderColor = Color.Gray,
+                errorPlaceholderColor = Color.Gray,
+                unfocusedPlaceholderColor = Color.Gray),
+            placeholder = {
+
+                    Text(
+
+                        color = Color.Gray,
+                        text = "Wpisz nazwę drużyny"
+                    )
+
+            }
+        )
+        Button(
+            shape = RoundedCornerShape(20),
+            colors = ButtonColors(
+                contentColor = Color.Transparent,
+                containerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
+            ),
+            contentPadding = PaddingValues(0.dp),
+            modifier = Modifier
+                .size(50.dp),
+            onClick = { /*TODO*/ }) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                colorFilter = ColorFilter.tint(Color.White),
+                painter = painterResource(id = R.drawable.baseline_check_box_24),
+                contentDescription = null
+            )
+        }
+        Button(
+            colors = ButtonColors(
+                contentColor = Color.Transparent,
+                containerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
+            ),
+            contentPadding = PaddingValues(0.dp),
+            modifier = Modifier
+                .size(50.dp),
+            onClick = { /*TODO*/ }) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                colorFilter = ColorFilter.tint(Color.White),
+                painter = painterResource(id = R.drawable.baseline_arrow_forward_24),
+                contentDescription = null
+            )
+        }
+
+
+
+    }
+
 
 }
