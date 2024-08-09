@@ -129,7 +129,7 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.9f)
+                .fillMaxHeight(0.85f)
         ) {
             val maxWidth = maxWidth
             val maxHeight = maxHeight
@@ -161,14 +161,14 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                fontSize = 17.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.White),
                 color = colorResource(id = R.color.darkGreen),
-                text = level.id.toString()
+                text = if (level.isCompleted) level.shortAnswer else level.id.toString()
             )
         }
 
