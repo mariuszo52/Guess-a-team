@@ -23,10 +23,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,19 +40,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
-import com.example.guesstheteam.data.Position
-import java.time.temporal.TemporalAmount
+import kotlinx.coroutines.delay
 
 @Composable
 fun LevelScreen(
@@ -402,6 +398,18 @@ fun LevelScreenAnswerBox(
         }
 
         var answer by remember { mutableStateOf(TextFieldValue("")) }
+        var isAnswerCorrect: Boolean by remember { mutableStateOf(true) }
+        var answerTextFieldBgColor by remember { mutableStateOf(Color.White) }
+
+        LaunchedEffect(isAnswerCorrect) {
+            if (!isAnswerCorrect) {
+                answerTextFieldBgColor = Color.Red
+                delay(2000)
+                answerTextFieldBgColor = Color.White
+                isAnswerCorrect = true
+            }
+        }
+
 
         TextField(
             enabled = !level.isCompleted,
@@ -421,9 +429,9 @@ fun LevelScreenAnswerBox(
             colors =
             TextFieldDefaults.colors(
                 errorContainerColor = Color.White,
-                focusedContainerColor = Color.White,
+                focusedContainerColor = answerTextFieldBgColor,
                 disabledContainerColor = colorResource(id = R.color.lightGreen),
-                unfocusedContainerColor = Color.White,
+                unfocusedContainerColor = answerTextFieldBgColor,
                 focusedPlaceholderColor = Color.Gray,
                 disabledPlaceholderColor = Color.Gray,
                 errorPlaceholderColor = Color.Gray,
@@ -441,7 +449,7 @@ fun LevelScreenAnswerBox(
             enabled = !level.isCompleted,
             shape = RoundedCornerShape(20),
             colors = ButtonColors(
-                contentColor = Color.Transparent,
+                contentColor = answerTextFieldBgColor,
                 containerColor = Color.Transparent,
                 disabledContentColor = Color.Transparent,
                 disabledContainerColor = Color.Transparent
@@ -449,7 +457,10 @@ fun LevelScreenAnswerBox(
             contentPadding = PaddingValues(0.dp),
             modifier = Modifier
                 .size(50.dp),
-            onClick = { onCheckClick(answer.text, level) }) {
+            onClick = {
+                onCheckClick(answer.text, level)
+                isAnswerCorrect = level.isCompleted
+            }) {
             Image(
                 modifier = Modifier
                     .fillMaxSize(),

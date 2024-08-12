@@ -2,10 +2,13 @@ package com.example.guesstheteam.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.repository.LevelRepository
 import com.example.guesstheteam.repository.PlayerRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,10 +24,12 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
         return levelRepository.showLeagueName(level)
     }
 
-    suspend fun onCheckClick(level: Level, answer: String) {
+    fun onCheckClick(level: Level, answer: String){
         if (level.answer.lowercase() == answer.lowercase()) {
-            levelRepository.setLevelCompleted(level)
-            playerRepository.setLevelPlayersNamesVisible(level)
+            viewModelScope.launch(Dispatchers.IO) {
+                levelRepository.setLevelCompleted(level)
+                playerRepository.setLevelPlayersNamesVisible(level)
+            }
         }
     }
 

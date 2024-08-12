@@ -1,6 +1,5 @@
 package com.example.guesstheteam
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,12 +23,9 @@ import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Collections
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,15 +95,10 @@ fun Navigation(
                     it,
                     players,
                     onCheckClick = { answer, level ->
-                        coroutineScope.launch(Dispatchers.IO) {
-                            levelViewModel.onCheckClick(
-                                level,
-                                answer
-                            )
-                        }
+                        levelViewModel.onCheckClick(level, answer)
                     },
                     onBackClick = { navController.popBackStack() },
-                    onArrowClick = {levelId -> navController.navigate("level/$levelId")},
+                    onArrowClick = { levelId -> navController.navigate("level/$levelId") },
                     onLeagueNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {
                             levelViewModel.showLeagueName(level!!)
