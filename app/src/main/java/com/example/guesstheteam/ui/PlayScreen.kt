@@ -60,7 +60,7 @@ fun PlayScreen(
             .background(color = Color.White)
             .fillMaxSize()
     ) {
-        PlayScreenMenu(onBackClick)
+        PlayScreenMenu(levels, onBackClick)
         PlayScreenMain(levels, levelViewModel, onLevelClick)
     }
 }
@@ -178,7 +178,9 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
 }
 
 @Composable
-fun PlayScreenMenu(onBackClick: () -> Unit) {
+fun PlayScreenMenu(levels: List<Level>, onBackClick: () -> Unit) {
+    val levelsCount = levels.size
+    val completedLevelsCount = levels.filter { level -> level.isCompleted }.size
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -223,7 +225,7 @@ fun PlayScreenMenu(onBackClick: () -> Unit) {
             )
 
             Text(
-                text = "116/120",
+                text = "${completedLevelsCount}/${levelsCount}",
                 textAlign = TextAlign.End,
                 color = colorResource(id = R.color.darkGreen),
                 fontWeight = FontWeight.Bold,

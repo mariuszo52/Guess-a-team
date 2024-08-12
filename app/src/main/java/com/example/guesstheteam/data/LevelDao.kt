@@ -22,4 +22,7 @@ interface LevelDao {
 
     @Query("UPDATE Level SET isCompleted = 1 WHERE id = :levelId")
     suspend fun updateIsLevelCompleted(levelId: Long)
+
+    @Query("SELECT COUNT(*) from Level")
+    fun countAllLevels(): Flow<Long>
 }

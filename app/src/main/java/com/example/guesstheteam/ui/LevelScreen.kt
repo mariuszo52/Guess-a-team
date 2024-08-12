@@ -57,8 +57,10 @@ import java.time.temporal.TemporalAmount
 
 @Composable
 fun LevelScreen(
+    lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
     onBackClick: () -> Unit,
     onLeagueNameClick: (level: Level) -> Unit
@@ -67,8 +69,8 @@ fun LevelScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LevelScreenMenu(levelId = level.id, onBackClick)
-        LevelScreenMain(level, players, onCheckClick, onLeagueNameClick)
+        LevelScreenMenu(level.id, onBackClick)
+        LevelScreenMain(lastLevelId, level, players, onArrowClick, onCheckClick, onLeagueNameClick)
     }
 
 
@@ -77,8 +79,10 @@ fun LevelScreen(
 
 @Composable
 fun LevelScreenMain(
+    lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
@@ -145,7 +149,7 @@ fun LevelScreenMain(
                 .background(color = Color.Blue)
 
         ) {
-            LevelScreenAnswerBox(level, onCheckClick)
+            LevelScreenAnswerBox(lastLevelId, level, onArrowClick, onCheckClick)
         }
     }
 }
@@ -183,7 +187,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolea
             Text(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                fontSize = 8.sp,
+                fontSize = if (player.name.length >= 10) 5.sp else 8.sp,
                 color = colorResource(id = R.color.darkGreen),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -362,7 +366,12 @@ fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick
 }
 
 @Composable
-fun LevelScreenAnswerBox(level: Level, onCheckClick: (String, Level) -> Unit) {
+fun LevelScreenAnswerBox(
+    lastLevelId: Long,
+    level: Level,
+    onArrowClick: (levelId: Long) -> Unit,
+    onCheckClick: (String, Level) -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -374,13 +383,15 @@ fun LevelScreenAnswerBox(level: Level, onCheckClick: (String, Level) -> Unit) {
             colors = ButtonColors(
                 contentColor = Color.Transparent,
                 containerColor = Color.Transparent,
-                disabledContentColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent
+                disabledContentColor = Color.Gray,
+                disabledContainerColor = Color.Gray
             ),
+            enabled = level.id > 1,
             contentPadding = PaddingValues(0.dp),
             modifier = Modifier
                 .size(50.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = { if (level.id > 1) onArrowClick(level.id - 1) })
+        {
             Image(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -452,13 +463,16 @@ fun LevelScreenAnswerBox(level: Level, onCheckClick: (String, Level) -> Unit) {
             colors = ButtonColors(
                 contentColor = Color.Transparent,
                 containerColor = Color.Transparent,
-                disabledContentColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent
+                disabledContentColor = Color.Gray,
+                disabledContainerColor = Color.Gray
             ),
+            enabled = level.id < lastLevelId,
             contentPadding = PaddingValues(0.dp),
             modifier = Modifier
                 .size(50.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                if (level.id < lastLevelId) onArrowClick(level.id + 1)
+            }) {
             Image(
                 modifier = Modifier
                     .fillMaxSize(),

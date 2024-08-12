@@ -21,7 +21,6 @@ abstract class GuessDatabase : RoomDatabase() {
                     GuessDatabase::class.java,
                     "guessDatabase"
                 )
-                    .fallbackToDestructiveMigration()
                     .createFromAsset("guessDatabase.db")
                     .build()
                 INSTANCE = instance

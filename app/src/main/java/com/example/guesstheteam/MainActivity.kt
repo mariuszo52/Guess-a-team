@@ -92,8 +92,10 @@ fun Navigation(
             val players by levelViewModel.getLevelPlayers(levelId)
                 .collectAsState(initial = Collections.emptyList())
             val coroutineScope = rememberCoroutineScope()
+            val levelsCount by levelViewModel.getAllLevelsCount().collectAsState(initial = 0)
             level?.let {
                 LevelScreen(
+                    levelsCount,
                     it,
                     players,
                     onCheckClick = { answer, level ->
@@ -105,6 +107,7 @@ fun Navigation(
                         }
                     },
                     onBackClick = { navController.popBackStack() },
+                    onArrowClick = {levelId -> navController.navigate("level/$levelId")},
                     onLeagueNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {
                             levelViewModel.showLeagueName(level!!)
