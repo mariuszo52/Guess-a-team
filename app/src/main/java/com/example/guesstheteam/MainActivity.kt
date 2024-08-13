@@ -98,6 +98,9 @@ fun Navigation(
                     levelsCount,
                     it,
                     players,
+                    onShowTeamNameClick = {
+                        coroutineScope.launch(Dispatchers.IO) { levelViewModel.setTeamNameShowed(level!!)  }
+                    },
                     onShowPlayerClick = {
                         coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!) }
                     },

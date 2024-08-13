@@ -33,5 +33,9 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    suspend fun setTeamNameShowed(level: Level){
+        levelRepository.setTeamNameShowed(level)
+    }
+
 
 }

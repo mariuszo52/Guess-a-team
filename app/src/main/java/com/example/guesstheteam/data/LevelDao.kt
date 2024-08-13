@@ -25,4 +25,7 @@ interface LevelDao {
 
     @Query("SELECT COUNT(*) from Level")
     fun countAllLevels(): Flow<Long>
+
+    @Query("UPDATE LEVEL SET isTeamNameShowed = 1 WHERE id = :levelId")
+    fun updateIsTeamNameShowed(levelId: Long)
 }

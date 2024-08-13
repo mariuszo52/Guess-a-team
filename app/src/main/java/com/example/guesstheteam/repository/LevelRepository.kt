@@ -23,5 +23,8 @@ class LevelRepository(context: Context) {
     suspend fun setLevelCompleted(level: Level){
         levelDao.updateIsLevelCompleted(level.id)
     }
+    suspend fun setTeamNameShowed(level: Level){
+        levelDao.updateIsTeamNameShowed(level.id)
+    }
 
 }

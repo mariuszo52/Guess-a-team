@@ -56,12 +56,15 @@ fun LevelScreen(
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onShowTeamNameClick: (level: Level) -> Unit,
     onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
     onBackClick: () -> Unit,
     onLeagueNameClick: (level: Level) -> Unit
 ) {
+    var answer by remember { mutableStateOf(TextFieldValue("")) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,10 +74,13 @@ fun LevelScreen(
             lastLevelId,
             level,
             players,
+            onShowTeamNameClick,
             onShowPlayerClick,
             onArrowClick,
             onCheckClick,
-            onLeagueNameClick
+            onLeagueNameClick,
+            answer,
+            onAnswerChange = { newAnswer -> answer = newAnswer }
         )
     }
 
@@ -87,10 +93,13 @@ fun LevelScreenMain(
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onShowTeamNameClick: (level: Level) -> Unit,
     onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
-    onLeagueNameClick: (level: Level) -> Unit
+    onLeagueNameClick: (level: Level) -> Unit,
+    answer: TextFieldValue,
+    onAnswerChange: (TextFieldValue) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -137,19 +146,25 @@ fun LevelScreenMain(
                     imageId = R.drawable.cup,
                     text = "NAZWA LIGI",
                     "20",
+                    enabled = !level.isCompleted,
                     onClick = { onLeagueNameClick(level) })
             } else {
                 TeamNameShowedButton(level = level)
             }
+            println("is teamnameshowed ${level.isTeamNameShowed}")
             LevelScreenHelpButton(
                 imageId = R.drawable.shirt,
                 text = "POKAŻ GRACZA", "10",
                 onClick = { onShowPlayerClick(level) },
-                enabled = !areAllPlayersShowed)
+                enabled = !(areAllPlayersShowed || level.isCompleted))
             LevelScreenHelpButton(
                 imageId = R.drawable.shield,
                 text = "NAZWA DRUŻYNY", "90",
-                onClick = { println("click LIGA") })
+                enabled = !(level.isTeamNameShowed || level.isCompleted),
+                onClick = {
+                    onShowTeamNameClick(level)
+                    onAnswerChange(TextFieldValue(level.answer))
+                })
         }
         Row(
             modifier = Modifier
@@ -158,7 +173,7 @@ fun LevelScreenMain(
                 .background(color = Color.Blue)
 
         ) {
-            LevelScreenAnswerBox(lastLevelId, level, onArrowClick, onCheckClick)
+            LevelScreenAnswerBox(lastLevelId, level, onArrowClick, onCheckClick, answer, onAnswerChange)
         }
     }
 }
@@ -388,7 +403,9 @@ fun LevelScreenAnswerBox(
     lastLevelId: Long,
     level: Level,
     onArrowClick: (levelId: Long) -> Unit,
-    onCheckClick: (String, Level) -> Unit
+    onCheckClick: (String, Level) -> Unit,
+    answer: TextFieldValue,
+    onAnswerChange: (TextFieldValue) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -419,7 +436,6 @@ fun LevelScreenAnswerBox(
             )
         }
 
-        var answer by remember { mutableStateOf(TextFieldValue("")) }
         var isAnswerCorrect: Boolean by remember { mutableStateOf(true) }
         var answerTextFieldBgColor by remember { mutableStateOf(Color.White) }
 
@@ -446,8 +462,8 @@ fun LevelScreenAnswerBox(
                 .background(color = Color.White)
                 .width(200.dp)
                 .height(50.dp),
-            value = if (level.isCompleted) TextFieldValue(level.answer) else answer,
-            onValueChange = { textFieldValue -> answer = textFieldValue },
+            value = if (level.isCompleted || level.isTeamNameShowed) TextFieldValue(level.answer) else answer,
+            onValueChange = { textFieldValue -> onAnswerChange(textFieldValue)},
             colors =
             TextFieldDefaults.colors(
                 errorContainerColor = Color.White,
