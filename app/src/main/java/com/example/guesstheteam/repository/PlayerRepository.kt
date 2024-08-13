@@ -19,4 +19,8 @@ class PlayerRepository(context: Context) {
     suspend fun setPlayerShowedById(player: Player){
         playerDao.setPlayerShowedById(player.id)
     }
+
+    suspend fun hideAllPlayers() = playerDao.setIsShowedToFalseForAllPlayers()
+
+
 }

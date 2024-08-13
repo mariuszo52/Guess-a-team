@@ -16,4 +16,7 @@ interface PlayerDao {
 
     @Query("UPDATE Player SET isShowed = 1 where id = :id")
     suspend fun setPlayerShowedById(id: Long)
+
+    @Query ("UPDATE Player SET isShowed = 0 WHERE id IS NOT NULL")
+    suspend fun setIsShowedToFalseForAllPlayers()
 }

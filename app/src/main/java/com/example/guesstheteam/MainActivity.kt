@@ -1,5 +1,7 @@
 package com.example.guesstheteam
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +27,7 @@ import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
 import com.example.guesstheteam.viewModel.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Collections
 
@@ -62,13 +65,18 @@ fun Navigation(
     levelViewModel: LevelViewModel,
     navController: NavHostController
 ) {
+    val coroutineScope = rememberCoroutineScope()
     NavHost(navController = navController, startDestination = "start") {
         composable("start") {
             StartScreen(navController)
         }
 
         composable("settings") {
-            SettingsScreen(navController)
+            SettingsScreen(
+                onBackClick = { navController.popBackStack() },
+                onTermsClick = {},
+                onResetClick = { coroutineScope.launch(Dispatchers.IO) { levelViewModel.resetProgress() } }
+            )
         }
         composable("play") {
             val levels by levelViewModel.levelsFlow.collectAsState(initial = Collections.emptyList())
@@ -91,7 +99,6 @@ fun Navigation(
             val level by levelViewModel.getLevelById(levelId).collectAsState(initial = null)
             val players by levelViewModel.getLevelPlayers(levelId)
                 .collectAsState(initial = Collections.emptyList())
-            val coroutineScope = rememberCoroutineScope()
             val levelsCount by levelViewModel.getAllLevelsCount().collectAsState(initial = 0)
             level?.let {
                 LevelScreen(
@@ -99,7 +106,11 @@ fun Navigation(
                     it,
                     players,
                     onShowTeamNameClick = {
-                        coroutineScope.launch(Dispatchers.IO) { levelViewModel.setTeamNameShowed(level!!)  }
+                        coroutineScope.launch(Dispatchers.IO) {
+                            levelViewModel.setTeamNameShowed(
+                                level!!
+                            )
+                        }
                     },
                     onShowPlayerClick = {
                         coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!) }

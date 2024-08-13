@@ -41,7 +41,11 @@ import com.example.guesstheteam.R
 
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    onBackClick: () -> Unit,
+    onResetClick: () -> Unit,
+    onTermsClick: () -> Unit
+) {
 
 
     Column(
@@ -72,7 +76,7 @@ fun SettingsScreen(navController: NavController) {
                     disabledContainerColor = Color.DarkGray
                 ),
 
-                onClick = { navController.popBackStack() }
+                onClick = { onBackClick() }
             ) {
                 Image(
                     modifier = Modifier
@@ -117,7 +121,7 @@ fun SettingsScreen(navController: NavController) {
                 MenuButton(
                     image = painterResource(id = R.drawable.baseline_delete_24),
                     text = stringResource(id = R.string.reset),
-                ) { navController.popBackStack() }
+                ) { onResetClick()}
             }
             Row(
                 modifier = Modifier
@@ -131,7 +135,7 @@ fun SettingsScreen(navController: NavController) {
                     image = painterResource(id = R.drawable.baseline_shield_24),
                     text = stringResource(id = R.string.terms)
                 )
-                { navController.popBackStack() }
+                { onTermsClick() }
             }
 
         }

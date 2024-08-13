@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Guess the team</string>
+    <string name="app_name">Odgadnij drużynę</string>
     <string name="odgadnij_druzyne">ODGADNIJ DRUŻYNĘ</string>
     <string name="sezon">SEZON 2023/2024</string>
     <string name="ustawienia">Ustawienia</string>

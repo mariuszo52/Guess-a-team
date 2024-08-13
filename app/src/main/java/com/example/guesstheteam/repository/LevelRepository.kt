@@ -27,5 +27,7 @@ class LevelRepository(context: Context) {
         levelDao.updateIsTeamNameShowed(level.id)
     }
     suspend fun unBlockNextLevel() = levelDao.setNextLevelEnabled()
+    suspend fun setLevelProgressColumnsToFalse() = levelDao.setLevelProgressColumnsToFalse()
+    suspend fun setDefaultEnabledLevels()  = levelDao.updateIsLevelEnabledToFalseWhereIdIsGreaterThan5()
 
 }

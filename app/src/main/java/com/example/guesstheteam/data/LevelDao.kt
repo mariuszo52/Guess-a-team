@@ -31,4 +31,11 @@ interface LevelDao {
 
     @Query("UPDATE Level SET isEnabled = 1 WHERE id = (SELECT id FROM LEVEL WHERE isEnabled = 0 ORDER BY id ASC LIMIT 1)")
     suspend fun setNextLevelEnabled()
+
+    @Query("UPDATE Level SET isTeamNameShowed = 0, isCompleted = 0, isLeagueShowed = 0 WHERE id IS NOT NULL ")
+    suspend fun setLevelProgressColumnsToFalse()
+
+    @Query("UPDATE LEVEL SET isEnabled = 0 WHERE id > 5")
+    suspend fun updateIsLevelEnabledToFalseWhereIdIsGreaterThan5()
+
 }
