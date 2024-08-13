@@ -29,6 +29,7 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
             viewModelScope.launch(Dispatchers.IO) {
                 levelRepository.setLevelCompleted(level)
                 playerRepository.setLevelPlayersNamesVisible(level)
+                levelRepository.unBlockNextLevel()
             }
         }
     }
@@ -36,6 +37,7 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
     suspend fun setTeamNameShowed(level: Level){
         levelRepository.setTeamNameShowed(level)
     }
+
 
 
 }

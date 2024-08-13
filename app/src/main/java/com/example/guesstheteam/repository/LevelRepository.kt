@@ -26,5 +26,6 @@ class LevelRepository(context: Context) {
     suspend fun setTeamNameShowed(level: Level){
         levelDao.updateIsTeamNameShowed(level.id)
     }
+    suspend fun unBlockNextLevel() = levelDao.setNextLevelEnabled()
 
 }
