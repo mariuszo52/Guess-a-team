@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -97,6 +98,7 @@ fun PlayScreenMain(
                 val players by levelViewModel.getLevelPlayers(level.id)
                     .collectAsState(initial = Collections.emptyList())
                 Button(
+                    enabled = level.isEnabled,
                     colors = ButtonColors(
                         containerColor = Color.Transparent,
                         contentColor = colorResource(id = R.color.darkGreen),
@@ -106,6 +108,7 @@ fun PlayScreenMain(
                     contentPadding = PaddingValues(0.dp),
                     shape = RectangleShape,
                     modifier = Modifier
+                        .alpha(if(level.isEnabled) 1f else 0.5f)
                         .aspectRatio(2 / 3f)
                         .fillMaxWidth()
                         .graphicsLayer(alpha = 0.9f),
@@ -150,6 +153,16 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
                         .rotate(10f),
                     colorFilter = ColorFilter.tint(Color.Green),
                     painter = painterResource(id = R.drawable.baseline_check_box_24),
+                    contentDescription = null
+                )
+            }
+            if (!level.isEnabled) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    colorFilter = ColorFilter.tint(Color.White),
+                    painter = painterResource(id = R.drawable.baseline_lock_24),
                     contentDescription = null
                 )
             }

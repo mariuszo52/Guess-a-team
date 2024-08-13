@@ -11,5 +11,6 @@ data class Level(
     val isCompleted: Boolean,
     val league: String,
     val isLeagueShowed: Boolean,
-    val isTeamNameShowed: Boolean
+    val isTeamNameShowed: Boolean,
+    val isEnabled: Boolean
 )
