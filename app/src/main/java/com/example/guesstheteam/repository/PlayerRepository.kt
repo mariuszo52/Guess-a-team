@@ -15,4 +15,8 @@ class PlayerRepository(context: Context) {
     suspend fun setLevelPlayersNamesVisible(level: Level){
         playerDao.updateLevelPlayersAreShowed(level.id)
     }
+
+    suspend fun setPlayerShowedById(player: Player){
+        playerDao.setPlayerShowedById(player.id)
+    }
 }

@@ -23,6 +23,7 @@ import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
+import com.example.guesstheteam.viewModel.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Collections
@@ -40,8 +41,10 @@ class MainActivity : ComponentActivity() {
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 val levelViewModel = ViewModelProvider(this)[LevelViewModel::class.java]
+                val playerViewModel = ViewModelProvider(this)[PlayerViewModel::class.java]
                 val navController = rememberNavController()
                 Navigation(
+                    playerViewModel = playerViewModel,
                     navController = navController,
                     levelViewModel = levelViewModel
                 )
@@ -55,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(
+    playerViewModel: PlayerViewModel,
     levelViewModel: LevelViewModel,
     navController: NavHostController
 ) {
@@ -94,6 +98,9 @@ fun Navigation(
                     levelsCount,
                     it,
                     players,
+                    onShowPlayerClick = {
+                        coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!) }
+                    },
                     onCheckClick = { answer, level ->
                         levelViewModel.onCheckClick(level, answer)
                     },

@@ -56,6 +56,7 @@ fun LevelScreen(
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
     onBackClick: () -> Unit,
@@ -66,7 +67,15 @@ fun LevelScreen(
             .fillMaxSize()
     ) {
         LevelScreenMenu(level.id, onBackClick)
-        LevelScreenMain(lastLevelId, level, players, onArrowClick, onCheckClick, onLeagueNameClick)
+        LevelScreenMain(
+            lastLevelId,
+            level,
+            players,
+            onShowPlayerClick,
+            onArrowClick,
+            onCheckClick,
+            onLeagueNameClick
+        )
     }
 
 
@@ -78,6 +87,7 @@ fun LevelScreenMain(
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
     onCheckClick: (String, Level) -> Unit,
     onLeagueNameClick: (level: Level) -> Unit
@@ -120,6 +130,8 @@ fun LevelScreenMain(
 
 
         ) {
+            val areAllPlayersShowed = players.filter(Player::isShowed).size == 11
+
             if (!level.isLeagueShowed) {
                 LevelScreenHelpButton(
                     imageId = R.drawable.cup,
@@ -132,7 +144,8 @@ fun LevelScreenMain(
             LevelScreenHelpButton(
                 imageId = R.drawable.shirt,
                 text = "POKAŻ GRACZA", "10",
-                onClick = { println("click LIGA") })
+                onClick = { onShowPlayerClick(level) },
+                enabled = !areAllPlayersShowed)
             LevelScreenHelpButton(
                 imageId = R.drawable.shield,
                 text = "NAZWA DRUŻYNY", "90",
@@ -284,6 +297,7 @@ fun TeamNameShowedButton(level: Level) {
         context.packageName
     )
     Button(
+        enabled = false,
         colors = ButtonColors(
             containerColor = colorResource(id = R.color.darkGreen),
             contentColor = Color.White,
@@ -308,8 +322,16 @@ fun TeamNameShowedButton(level: Level) {
 }
 
 @Composable
-fun LevelScreenHelpButton(imageId: Int, text: String, priceText: String, onClick: () -> Unit) {
+fun LevelScreenHelpButton(
+    imageId: Int,
+    text: String,
+    priceText: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+
+    ) {
     Button(
+        enabled = enabled,
         colors = ButtonColors(
             containerColor = colorResource(id = R.color.darkGreen),
             contentColor = Color.White,
@@ -403,7 +425,7 @@ fun LevelScreenAnswerBox(
 
         LaunchedEffect(isAnswerCorrect) {
             if (!isAnswerCorrect) {
-                answerTextFieldBgColor = Color.Red
+                answerTextFieldBgColor = Color(0xFFCF5B5B)
                 delay(2000)
                 answerTextFieldBgColor = Color.White
                 isAnswerCorrect = true
@@ -449,7 +471,7 @@ fun LevelScreenAnswerBox(
             enabled = !level.isCompleted,
             shape = RoundedCornerShape(20),
             colors = ButtonColors(
-                contentColor = answerTextFieldBgColor,
+                contentColor = Color.Transparent,
                 containerColor = Color.Transparent,
                 disabledContentColor = Color.Transparent,
                 disabledContainerColor = Color.Transparent
