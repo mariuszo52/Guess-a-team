@@ -1,5 +1,6 @@
 package com.example.guesstheteam.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -75,6 +76,7 @@ fun LevelScreen(
             lastLevelId,
             level,
             players,
+            totalPoints,
             onShowTeamNameClick,
             onShowPlayerClick,
             onArrowClick,
@@ -94,6 +96,7 @@ fun LevelScreenMain(
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    totalPoints: Int,
     onShowTeamNameClick: (level: Level) -> Unit,
     onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
@@ -102,6 +105,7 @@ fun LevelScreenMain(
     answer: TextFieldValue,
     onAnswerChange: (TextFieldValue) -> Unit
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .background(color = Color.Red)
@@ -152,7 +156,6 @@ fun LevelScreenMain(
             } else {
                 TeamNameShowedButton(level = level)
             }
-            println("is teamnameshowed ${level.isTeamNameShowed}")
             LevelScreenHelpButton(
                 imageId = R.drawable.shirt,
                 text = "POKAŻ GRACZA", "10",
@@ -163,8 +166,12 @@ fun LevelScreenMain(
                 text = "NAZWA DRUŻYNY", "90",
                 enabled = !(level.isTeamNameShowed || level.isCompleted),
                 onClick = {
-                    onShowTeamNameClick(level)
-                    onAnswerChange(TextFieldValue(level.answer))
+                    if(totalPoints >= 90) {
+                        onShowTeamNameClick(level)
+                        onAnswerChange(TextFieldValue(level.answer))
+                    }else{
+                        Toast.makeText(context,"Nie masz wystarczjącej ilości punktów", Toast.LENGTH_SHORT).show()
+                    }
                 })
         }
         Row(

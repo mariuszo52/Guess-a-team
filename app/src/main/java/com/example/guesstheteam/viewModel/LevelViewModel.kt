@@ -63,18 +63,8 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
 
     suspend fun setTeamNameShowed(level: Level, totalPoints: Int) {
         try {
-            if (totalPoints >= 90) {
-                pointsRepository.updateTotalPoints(Points(1, totalPoints - 90))
-                levelRepository.setTeamNameShowed(level)
-            } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        getApplication(),
-                        "Nie masz wystarczającej ilosci punktów",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+            pointsRepository.updateTotalPoints(Points(1, totalPoints - 90))
+            levelRepository.setTeamNameShowed(level)
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(

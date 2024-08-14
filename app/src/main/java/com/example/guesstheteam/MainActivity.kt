@@ -117,7 +117,12 @@ fun Navigation(
                         }
                     },
                     onShowPlayerClick = {
-                        coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!, totalPoints) }
+                        coroutineScope.launch(Dispatchers.IO) {
+                            playerViewModel.showPlayer(
+                                level!!,
+                                totalPoints
+                            )
+                        }
                     },
                     onCheckClick = { answer, level ->
                         levelViewModel.onCheckClick(level, answer)
