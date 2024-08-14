@@ -51,6 +51,7 @@ import java.util.Collections
 
 @Composable
 fun PlayScreen(
+    totalPoints: Int,
     levels: List<Level>,
     levelViewModel: LevelViewModel,
     onBackClick: () -> Unit,
@@ -61,7 +62,7 @@ fun PlayScreen(
             .background(color = Color.White)
             .fillMaxSize()
     ) {
-        PlayScreenMenu(levels, onBackClick)
+        PlayScreenMenu(totalPoints, levels, onBackClick)
         PlayScreenMain(levels, levelViewModel, onLevelClick)
     }
 }
@@ -191,7 +192,7 @@ fun LevelListElement(level: Level, players: List<Player>, flagSize: Int) {
 }
 
 @Composable
-fun PlayScreenMenu(levels: List<Level>, onBackClick: () -> Unit) {
+fun PlayScreenMenu(totalPoints: Int, levels: List<Level>, onBackClick: () -> Unit) {
     val levelsCount = levels.size
     val completedLevelsCount = levels.filter { level -> level.isCompleted }.size
     Row(
@@ -264,7 +265,7 @@ fun PlayScreenMenu(levels: List<Level>, onBackClick: () -> Unit) {
             )
 
             Text(
-                text = "200",
+                text = totalPoints.toString(),
                 textAlign = TextAlign.End,
                 color = colorResource(id = R.color.darkGreen),
                 fontWeight = FontWeight.Bold,

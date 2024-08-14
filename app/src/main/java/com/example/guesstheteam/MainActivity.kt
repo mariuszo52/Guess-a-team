@@ -1,7 +1,5 @@
 package com.example.guesstheteam
 
-import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -27,7 +28,6 @@ import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
 import com.example.guesstheteam.viewModel.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Collections
 
@@ -66,6 +66,8 @@ fun Navigation(
     navController: NavHostController
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val totalPoints by levelViewModel.totalPoints.collectAsState(initial = 0)
+
     NavHost(navController = navController, startDestination = "start") {
         composable("start") {
             StartScreen(navController)
@@ -81,6 +83,7 @@ fun Navigation(
         composable("play") {
             val levels by levelViewModel.levelsFlow.collectAsState(initial = Collections.emptyList())
             PlayScreen(
+                totalPoints = totalPoints,
                 levels = levels,
                 levelViewModel,
                 onBackClick = { navController.popBackStack() },
@@ -102,18 +105,19 @@ fun Navigation(
             val levelsCount by levelViewModel.getAllLevelsCount().collectAsState(initial = 0)
             level?.let {
                 LevelScreen(
+                    totalPoints,
                     levelsCount,
                     it,
                     players,
                     onShowTeamNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {
                             levelViewModel.setTeamNameShowed(
-                                level!!
+                                level!!, totalPoints
                             )
                         }
                     },
                     onShowPlayerClick = {
-                        coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!) }
+                        coroutineScope.launch(Dispatchers.IO) { playerViewModel.showPlayer(level!!, totalPoints) }
                     },
                     onCheckClick = { answer, level ->
                         levelViewModel.onCheckClick(level, answer)
@@ -122,7 +126,7 @@ fun Navigation(
                     onArrowClick = { levelId -> navController.navigate("level/$levelId") },
                     onLeagueNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {
-                            levelViewModel.showLeagueName(level!!)
+                            levelViewModel.showLeagueName(level!!, totalPoints)
                         }
                     }
                 )

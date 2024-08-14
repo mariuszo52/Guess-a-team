@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Level::class, Player::class], version = 11, exportSchema = false)
+@Database(entities = [Level::class, Player::class, Points::class], version = 12, exportSchema = false)
 abstract class GuessDatabase : RoomDatabase() {
     abstract fun LevelDao(): LevelDao
     abstract fun PlayerDao(): PlayerDao
+    abstract fun PointsDao(): PointsDao
 
     companion object {
         @Volatile

@@ -53,6 +53,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LevelScreen(
+    totalPoints: Int,
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
@@ -69,7 +70,7 @@ fun LevelScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LevelScreenMenu(level.id, onBackClick)
+        LevelScreenMenu(totalPoints,level.id, onBackClick)
         LevelScreenMain(
             lastLevelId,
             level,
@@ -227,7 +228,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolea
 }
 
 @Composable
-fun LevelScreenMenu(levelId: Long, testClick: () -> Unit) {
+fun LevelScreenMenu(totalPoints: Int, levelId: Long, testClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -289,7 +290,7 @@ fun LevelScreenMenu(levelId: Long, testClick: () -> Unit) {
             )
 
             Text(
-                text = "200",
+                text = totalPoints.toString(),
                 textAlign = TextAlign.End,
                 color = colorResource(id = R.color.darkGreen),
                 fontWeight = FontWeight.Bold,
