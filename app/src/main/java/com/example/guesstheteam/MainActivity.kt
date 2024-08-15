@@ -27,6 +27,7 @@ import com.example.guesstheteam.ui.LevelScreen
 import com.example.guesstheteam.ui.PlayScreen
 import com.example.guesstheteam.ui.SettingsScreen
 import com.example.guesstheteam.ui.StartScreen
+import com.example.guesstheteam.ui.TermsScreen
 import com.example.guesstheteam.ui.theme.GuessTheTeamTheme
 import com.example.guesstheteam.viewModel.LevelViewModel
 import com.example.guesstheteam.viewModel.PlayerViewModel
@@ -172,6 +173,11 @@ fun Navigation(
     val totalPoints by levelViewModel.totalPoints.collectAsState(initial = 0)
 
     NavHost(navController = navController, startDestination = "start") {
+        composable("terms") {
+            TermsScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
         composable("start") {
             StartScreen(
                 onSettingsClick = { navController.navigate("settings") },
@@ -189,7 +195,7 @@ fun Navigation(
         composable("settings") {
             SettingsScreen(
                 onBackClick = { navController.popBackStack() },
-                onTermsClick = {},
+                onTermsClick = { navController.navigate("terms") },
                 onResetClick = { coroutineScope.launch(Dispatchers.IO) { levelViewModel.resetProgress() } }
             )
         }
