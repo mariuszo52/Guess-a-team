@@ -14,4 +14,5 @@ interface PointsDao{
     @Update
     suspend fun updatePoints(points: Points)
 
+
 }

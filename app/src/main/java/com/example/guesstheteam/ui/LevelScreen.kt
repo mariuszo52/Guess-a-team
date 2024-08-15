@@ -54,10 +54,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LevelScreen(
+    isAdButtonEnable: Boolean,
     totalPoints: Int,
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
+    onAddPlayClick: () -> Unit,
     onShowTeamNameClick: (level: Level) -> Unit,
     onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
@@ -71,12 +73,14 @@ fun LevelScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LevelScreenMenu(totalPoints,level.id, onBackClick)
+        LevelScreenMenu(totalPoints, level.id, onBackClick)
         LevelScreenMain(
+            isAdButtonEnable,
             lastLevelId,
             level,
             players,
             totalPoints,
+            onAddPlayClick,
             onShowTeamNameClick,
             onShowPlayerClick,
             onArrowClick,
@@ -93,10 +97,12 @@ fun LevelScreen(
 
 @Composable
 fun LevelScreenMain(
+    isAdButtonEnable: Boolean,
     lastLevelId: Long,
     level: Level,
     players: List<Player>,
     totalPoints: Int,
+    onAddPlayClick: () -> Unit,
     onShowTeamNameClick: (level: Level) -> Unit,
     onShowPlayerClick: (level: Level) -> Unit,
     onArrowClick: (levelId: Long) -> Unit,
@@ -145,7 +151,12 @@ fun LevelScreenMain(
 
         ) {
             val areAllPlayersShowed = players.filter(Player::isShowed).size == 11
-
+            LevelScreenHelpButton(
+                enabled = isAdButtonEnable,
+                imageId = R.drawable.baseline_play_arrow,
+                text = "VIDEO",
+                priceText = "+10",
+                onClick = { onAddPlayClick()})
             if (!level.isLeagueShowed) {
                 LevelScreenHelpButton(
                     imageId = R.drawable.cup,
@@ -160,17 +171,22 @@ fun LevelScreenMain(
                 imageId = R.drawable.shirt,
                 text = "POKAŻ GRACZA", "10",
                 onClick = { onShowPlayerClick(level) },
-                enabled = !(areAllPlayersShowed || level.isCompleted))
+                enabled = !(areAllPlayersShowed || level.isCompleted)
+            )
             LevelScreenHelpButton(
                 imageId = R.drawable.shield,
                 text = "NAZWA DRUŻYNY", "90",
                 enabled = !(level.isTeamNameShowed || level.isCompleted),
                 onClick = {
-                    if(totalPoints >= 90) {
+                    if (totalPoints >= 90) {
                         onShowTeamNameClick(level)
                         onAnswerChange(TextFieldValue(level.answer))
-                    }else{
-                        Toast.makeText(context,"Nie masz wystarczjącej ilości punktów", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Nie masz wystarczjącej ilości punktów",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
         }
@@ -181,7 +197,14 @@ fun LevelScreenMain(
                 .background(color = Color.Blue)
 
         ) {
-            LevelScreenAnswerBox(lastLevelId, level, onArrowClick, onCheckClick, answer, onAnswerChange)
+            LevelScreenAnswerBox(
+                lastLevelId,
+                level,
+                onArrowClick,
+                onCheckClick,
+                answer,
+                onAnswerChange
+            )
         }
     }
 }
@@ -352,7 +375,7 @@ fun LevelScreenHelpButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 
-    ) {
+) {
     Button(
         enabled = enabled,
         colors = ButtonColors(
@@ -471,7 +494,7 @@ fun LevelScreenAnswerBox(
                 .width(200.dp)
                 .height(50.dp),
             value = if (level.isCompleted || level.isTeamNameShowed) TextFieldValue(level.answer) else answer,
-            onValueChange = { textFieldValue -> onAnswerChange(textFieldValue)},
+            onValueChange = { textFieldValue -> onAnswerChange(textFieldValue) },
             colors =
             TextFieldDefaults.colors(
                 errorContainerColor = Color.White,
