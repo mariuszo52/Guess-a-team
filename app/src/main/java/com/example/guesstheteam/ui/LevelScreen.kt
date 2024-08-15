@@ -142,7 +142,7 @@ fun LevelScreenMain(
 
             LaunchedEffect(Unit) {
                 while (visibleIndex < 10){
-                    delay(1100)
+                    delay(500)
                     visibleIndex ++
                     popSound.start()
                 }
