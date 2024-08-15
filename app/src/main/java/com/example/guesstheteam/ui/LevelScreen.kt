@@ -2,6 +2,7 @@ package com.example.guesstheteam.ui
 
 import android.media.MediaPlayer
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -134,80 +136,96 @@ fun LevelScreenMain(
                     .fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
             )
-            players.forEach { player ->
-                PositionImage(maxWidth, maxHeight, player, true, 55)
+
+            var visibleIndex by remember { mutableIntStateOf(-1) }
+            val popSound by remember { mutableStateOf(MediaPlayer.create(context, R.raw.pop))}
+
+            LaunchedEffect(Unit) {
+                while (visibleIndex < 10){
+                    delay(1200)
+                    visibleIndex ++
+                    popSound.start()
+                }
             }
 
-
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.5f)
-                .background(color = Color.White)
-
-
-        ) {
-            val areAllPlayersShowed = players.filter(Player::isShowed).size == 11
-            LevelScreenHelpButton(
-                enabled = isAdButtonEnable,
-                imageId = R.drawable.baseline_play_arrow,
-                text = "VIDEO",
-                priceText = "+10",
-                onClick = { onAddPlayClick()})
-            if (!level.isLeagueShowed) {
-                LevelScreenHelpButton(
-                    imageId = R.drawable.cup,
-                    text = "NAZWA LIGI",
-                    "20",
-                    enabled = !level.isCompleted,
-                    onClick = { onLeagueNameClick(level) })
-            } else {
-                TeamNameShowedButton(level = level)
+            players.forEachIndexed() { index, player ->
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = visibleIndex >= index
+                ) {
+                    PositionImage(maxWidth, maxHeight, player, true, 55)
+                }
             }
-            LevelScreenHelpButton(
-                imageId = R.drawable.shirt,
-                text = "POKAŻ GRACZA", "10",
-                onClick = { onShowPlayerClick(level) },
-                enabled = !(areAllPlayersShowed || level.isCompleted)
-            )
-            LevelScreenHelpButton(
-                imageId = R.drawable.shield,
-                text = "NAZWA DRUŻYNY", "90",
-                enabled = !(level.isTeamNameShowed || level.isCompleted),
-                onClick = {
-                    if (totalPoints >= 90) {
-                        onShowTeamNameClick(level)
-                        onAnswerChange(TextFieldValue(level.answer))
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Nie masz wystarczjącej ilości punktów",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                })
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.5f)
-                .background(color = Color.Blue)
 
-        ) {
-            LevelScreenAnswerBox(
-                lastLevelId,
-                level,
-                onArrowClick,
-                onCheckClick,
-                answer,
-                onAnswerChange
-            )
+
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(0.5f)
+            .background(color = Color.White)
+
+
+    ) {
+        val areAllPlayersShowed = players.filter(Player::isShowed).size == 11
+        LevelScreenHelpButton(
+            enabled = isAdButtonEnable,
+            imageId = R.drawable.baseline_play_arrow,
+            text = "VIDEO",
+            priceText = "+10",
+            onClick = { onAddPlayClick() })
+        if (!level.isLeagueShowed) {
+            LevelScreenHelpButton(
+                imageId = R.drawable.cup,
+                text = "NAZWA LIGI",
+                "20",
+                enabled = !level.isCompleted,
+                onClick = { onLeagueNameClick(level) })
+        } else {
+            TeamNameShowedButton(level = level)
         }
+        LevelScreenHelpButton(
+            imageId = R.drawable.shirt,
+            text = "POKAŻ GRACZA", "10",
+            onClick = { onShowPlayerClick(level) },
+            enabled = !(areAllPlayersShowed || level.isCompleted)
+        )
+        LevelScreenHelpButton(
+            imageId = R.drawable.shield,
+            text = "NAZWA DRUŻYNY", "90",
+            enabled = !(level.isTeamNameShowed || level.isCompleted),
+            onClick = {
+                if (totalPoints >= 90) {
+                    onShowTeamNameClick(level)
+                    onAnswerChange(TextFieldValue(level.answer))
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Nie masz wystarczjącej ilości punktów",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(0.5f)
+            .background(color = Color.Blue)
+
+    ) {
+        LevelScreenAnswerBox(
+            lastLevelId,
+            level,
+            onArrowClick,
+            onCheckClick,
+            answer,
+            onAnswerChange
+        )
+    }
+}
 }
 
 @Composable
