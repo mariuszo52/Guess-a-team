@@ -3,7 +3,6 @@ package com.example.guesstheteam.viewModel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
 import com.example.guesstheteam.data.Points
@@ -12,7 +11,6 @@ import com.example.guesstheteam.repository.PlayerRepository
 import com.example.guesstheteam.repository.PointsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Random
 
@@ -20,12 +18,6 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     private val playerRepository = PlayerRepository(app)
     private val levelRepository = LevelRepository(app)
     private val pointsRepository = PointsRepository(app)
-
-    fun addPlayer(player: Player) {
-        viewModelScope.launch {
-            playerRepository.addPlayer(player)
-        }
-    }
 
     suspend fun showPlayer(level: Level, totalPoints: Int) {
         try {

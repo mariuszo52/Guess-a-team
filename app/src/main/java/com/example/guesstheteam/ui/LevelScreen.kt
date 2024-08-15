@@ -2,7 +2,6 @@ package com.example.guesstheteam.ui
 
 import android.media.MediaPlayer
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -148,7 +147,7 @@ fun LevelScreenMain(
                 }
             }
 
-            players.forEachIndexed() { index, player ->
+            players.forEachIndexed { index, player ->
                 androidx.compose.animation.AnimatedVisibility(
                     visible = visibleIndex >= index
                 ) {
