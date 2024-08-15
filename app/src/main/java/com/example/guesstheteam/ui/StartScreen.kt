@@ -38,7 +38,9 @@ import androidx.navigation.NavController
 import com.example.guesstheteam.R
 
 @Composable
-fun StartScreen(navController: NavController) {
+fun StartScreen(onPlayClick: () -> Unit,
+                onPremiumClick: () -> Unit,
+                onSettingsClick: () -> Unit) {
     Image(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +90,7 @@ fun StartScreen(navController: NavController) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = {navController.navigate("play")}
+            onClick = {onPlayClick()}
         ) {
             Image(
                 modifier = Modifier
@@ -120,7 +122,7 @@ fun StartScreen(navController: NavController) {
                         disabledContentColor = Color.Gray,
                         disabledContainerColor = Color.DarkGray
                     ),
-                    onClick = { navController.navigate("settings") }
+                    onClick = { onSettingsClick() }
                 ) {
                     Image(
                         modifier = Modifier
@@ -155,7 +157,7 @@ fun StartScreen(navController: NavController) {
                         disabledContentColor = Color.Gray,
                         disabledContainerColor = Color.DarkGray
                     ),
-                    onClick = { navController.navigate("level") }
+                    onClick = { onPremiumClick() }
                 ) {
                     Image(
                         colorFilter = ColorFilter.tint(colorResource(id = R.color.gold)),

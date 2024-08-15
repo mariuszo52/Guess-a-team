@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -172,7 +173,17 @@ fun Navigation(
 
     NavHost(navController = navController, startDestination = "start") {
         composable("start") {
-            StartScreen(navController)
+            StartScreen(
+                onSettingsClick = { navController.navigate("settings") },
+                onPremiumClick = {
+                    Toast.makeText(
+                        activity.applicationContext,
+                        "Wkrótce dostępne",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onPlayClick = { navController.navigate("play") }
+            )
         }
 
         composable("settings") {

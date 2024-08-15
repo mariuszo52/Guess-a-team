@@ -1,9 +1,12 @@
 package com.example.guesstheteam.viewModel
 
 import android.app.Application
+import android.media.MediaPlayer
 import android.widget.Toast
+import androidx.compose.runtime.remember
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Points
 import com.example.guesstheteam.repository.LevelRepository
@@ -17,6 +20,9 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
     private val levelRepository = LevelRepository(app)
     private val playerRepository = PlayerRepository(app)
     private val pointsRepository = PointsRepository(app)
+
+    val wrongSound = MediaPlayer.create(app, R.raw.wrong)
+    val correctSound = MediaPlayer.create(app, R.raw.correct)
 
     val levelsFlow = levelRepository.getAllLevels()
     var totalPoints = pointsRepository.getTotalPoints()
@@ -57,7 +63,10 @@ class LevelViewModel(app: Application) : AndroidViewModel(app) {
                 levelRepository.setLevelCompleted(level)
                 playerRepository.setLevelPlayersNamesVisible(level)
                 levelRepository.unBlockNextLevel()
+                correctSound.start()
             }
+        } else {
+            wrongSound.start()
         }
     }
 
