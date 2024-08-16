@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Odgadnij drużynę</string>
+    <string name="app_name">Odgadnij Drużynę</string>
     <string name="odgadnij_druzyne">ODGADNIJ DRUŻYNĘ</string>
-    <string name="sezon">SEZON 2023/2024</string>
+    <string name="sezon">SEZON 2024/2025</string>
     <string name="ustawienia">Ustawienia</string>
     <string name="premium">Premium</string>
     <string name="reset">Resetuj Postęp</string>
