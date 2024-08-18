@@ -44,14 +44,17 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.guesstheteam.AdViewBanner
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
 import com.example.guesstheteam.viewModel.LevelViewModel
+import com.google.android.gms.ads.AdView
 import kotlinx.coroutines.delay
 import java.util.Collections
 
@@ -71,6 +74,10 @@ fun PlayScreen(
     ) {
         PlayScreenMenu(totalPoints, levels, onBackClick)
         PlayScreenMain(levels, levelViewModel, onLevelClick)
+        AdViewBanner(
+            modifier = Modifier
+                .fillMaxSize(),
+            addUnitId = stringResource(id = R.string.banner_unit_id))
     }
 }
 
@@ -82,7 +89,8 @@ fun PlayScreenMain(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight(0.92f)
     ) {
         Image(
             modifier = Modifier
@@ -141,7 +149,6 @@ fun PlayScreenMain(
                 }
             }
         }
-
 
     }
 }

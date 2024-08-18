@@ -42,6 +42,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.guesstheteam.AdViewBanner
 import com.example.guesstheteam.R
 import com.example.guesstheteam.data.Level
 import com.example.guesstheteam.data.Player
@@ -91,6 +93,7 @@ fun LevelScreen(
             answer,
             onAnswerChange = { newAnswer -> answer = newAnswer }
         )
+
     }
 
 
@@ -116,7 +119,6 @@ fun LevelScreenMain(
     val context = LocalContext.current
     Column(
         modifier = Modifier
-            .background(color = Color.Red)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
 
@@ -163,7 +165,7 @@ fun LevelScreenMain(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .weight(0.5f)
+            .height(100.dp)
             .background(color = Color.White)
 
 
@@ -179,7 +181,7 @@ fun LevelScreenMain(
             LevelScreenHelpButton(
                 imageId = R.drawable.cup,
                 text = "NAZWA LIGI",
-                "20",
+                "-20",
                 enabled = !level.isCompleted,
                 onClick = { onLeagueNameClick(level) })
         } else {
@@ -187,13 +189,13 @@ fun LevelScreenMain(
         }
         LevelScreenHelpButton(
             imageId = R.drawable.shirt,
-            text = "POKAŻ GRACZA", "10",
+            text = "POKAŻ GRACZA", "-10",
             onClick = { onShowPlayerClick(level) },
             enabled = !(areAllPlayersShowed || level.isCompleted)
         )
         LevelScreenHelpButton(
             imageId = R.drawable.shield,
-            text = "NAZWA DRUŻYNY", "90",
+            text = "NAZWA DRUŻYNY", "-90",
             enabled = !(level.isTeamNameShowed || level.isCompleted),
             onClick = {
                 if (totalPoints >= 90) {
@@ -211,8 +213,7 @@ fun LevelScreenMain(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .weight(0.5f)
-            .background(color = Color.Blue)
+            .height(100.dp)
 
     ) {
         LevelScreenAnswerBox(
@@ -224,6 +225,9 @@ fun LevelScreenMain(
             onAnswerChange
         )
     }
+        AdViewBanner(
+            modifier = Modifier.fillMaxSize(),
+            addUnitId = stringResource(id = R.string.banner_unit_id))
 }
 }
 
@@ -276,7 +280,7 @@ fun PositionImage(maxWidth: Dp, maxHeight: Dp, player: Player, showNames: Boolea
 }
 
 @Composable
-fun LevelScreenMenu(totalPoints: Int, levelId: Long, testClick: () -> Unit) {
+fun LevelScreenMenu(totalPoints: Int, levelId: Long, onBackClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -296,7 +300,7 @@ fun LevelScreenMenu(totalPoints: Int, levelId: Long, testClick: () -> Unit) {
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = Color.DarkGray
             ),
-            onClick = testClick
+            onClick = onBackClick
         ) {
             Image(
                 colorFilter = ColorFilter.tint(Color.White),
@@ -460,7 +464,8 @@ fun LevelScreenAnswerBox(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(100.dp)
             .background(color = colorResource(id = R.color.darkGreen))
     ) {
         Button(

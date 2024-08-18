@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,6 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -33,7 +38,10 @@ import com.example.guesstheteam.viewModel.LevelViewModel
 import com.example.guesstheteam.viewModel.PlayerViewModel
 import com.example.guesstheteam.viewModel.PointsViewModel
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -56,6 +64,7 @@ class MainActivity : ComponentActivity() {
             onAdLoaded = { value -> rewardedAd = value },
             setAdButtonEnable = { value -> isAdButtonEnable = value }
         )
+
         setContent {
             GuessTheTeamTheme {
                 LaunchedEffect(Unit) {
@@ -96,7 +105,7 @@ fun loadAd(
     val adRequest = AdRequest.Builder().build()
     RewardedAd.load(
         context,
-        "ca-app-pub-8472043461397762/5450032256",
+        "ca-app-pub-3940256099942544/5224354917",
         adRequest,
         object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
@@ -267,6 +276,31 @@ fun Navigation(
             }
         }
     }
+}
+
+@Composable
+fun AdViewBanner(modifier: Modifier, addUnitId: String, adSize: AdSize = AdSize.BANNER) {
+    AndroidView(
+        modifier = modifier,
+        factory = { ctx: Context ->
+            AdView(ctx).apply {
+                this.adUnitId = addUnitId
+                this.setAdSize(adSize)
+                this.adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        Log.d("AdMobBanner", "Ad loaded successfully")
+                    }
+
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        Log.e("AdMobBanner", "Ad failed to load: ${error.message}")
+                    }
+                }
+                loadAd(AdRequest.Builder().build())
+            }
+
+        }
+
+        )
 }
 
 

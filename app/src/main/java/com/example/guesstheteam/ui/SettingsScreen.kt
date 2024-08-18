@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.guesstheteam.AdViewBanner
 import com.example.guesstheteam.R
 
 
@@ -133,9 +134,16 @@ fun SettingsScreen(
                 )
                 { onTermsClick() }
             }
-
         }
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxSize()) {
+            AdViewBanner(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                addUnitId = stringResource(id = R.string.banner_unit_id))
 
         }
     }
