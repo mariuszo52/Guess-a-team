@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.guesstheteam"
+    namespace = "pl.mowebcreations.guesstheteam"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.guesstheteam"
+        applicationId = "pl.mowebcreations.guesstheteam"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
