@@ -105,7 +105,7 @@ fun loadAd(
     val adRequest = AdRequest.Builder().build()
     RewardedAd.load(
         context,
-        "ca-app-pub-3940256099942544/5224354917",
+        "ca-app-pub-8472043461397762/5450032256",
         adRequest,
         object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
