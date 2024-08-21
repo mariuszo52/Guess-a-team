@@ -263,7 +263,7 @@ fun Navigation(
                     onCheckClick = { answer, level ->
                         levelViewModel.onCheckClick(level, answer)
                     },
-                    onBackClick = { navController.navigate("play")},
+                    onBackClick = { navController.popBackStack("play", inclusive = false) },
                     onArrowClick = { levelId -> navController.navigate("level/$levelId") },
                     onLeagueNameClick = {
                         coroutineScope.launch(Dispatchers.IO) {
@@ -298,7 +298,7 @@ fun AdViewBanner(modifier: Modifier, addUnitId: String, adSize: AdSize = AdSize.
 
         }
 
-        )
+    )
 }
 
 
