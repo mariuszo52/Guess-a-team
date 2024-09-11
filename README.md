@@ -27,9 +27,9 @@ The game is built using **Android Studio** and **Jetpack Compose**, offering a m
 
 ## Screenshots
 
+![Screenshot 1](https://github.com/mariuszo52/Guess-a-team/blob/main/screenshoots/1.jpg?raw=true)
 ![Screenshot 1](https://github.com/mariuszo52/Guess-a-team/blob/main/screenshoots/2.jpg?raw=true)
-![Screenshot 2](https://github.com/mariuszo52/Guess-a-team/tree/main/screenshoots/2.jpg)
-![Screenshot 3](https://github.com/mariuszo52/Guess-a-team/tree/main/screenshoots/3.jpg)
+![Screenshot 1](https://github.com/mariuszo52/Guess-a-team/blob/main/screenshoots/3.jpg?raw=true)
 
 ## Contributing
 If you would like to contribute to the project, feel free to open a pull request or submit issues. We welcome feedback and suggestions for new features or improvements!
